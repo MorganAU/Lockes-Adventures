@@ -174,5 +174,10 @@ extern void touchDir(int direction, GameObject *defenseur, GameObject attaquant)
 
 extern void resetInput(Input *input);
 
+extern void walkFrameTimer(void);
+extern void attackFrameTimer(void);
+extern void playerIdleHorizontale(GameObject *entity);
+extern void playerIdleVerticale(GameObject *entity);
+extern void playerIdle(Input *input, GameObject *entity);
 
 #endif // PROTOTYPES_H_INCLUDED

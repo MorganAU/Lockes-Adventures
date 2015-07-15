@@ -27,7 +27,7 @@
 /* Constante pour l'animation */
 #define TIME_BETWEEN_2_FRAMES 20
 #define TIME_BETWEEN_2_FRAMES_PLAYER 4
-#define TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK 6
+#define TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK 3
 
 /* Taille du sprite de notre héros */
 #define PLAYER_WIDTH 30

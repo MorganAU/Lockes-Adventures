@@ -18,6 +18,7 @@ GameObject *getPlayer(void)
 int getAttack(void)
 {
     return player.estEnTrainDAttaquer;
+
 }
 
 
@@ -95,7 +96,6 @@ void setPlayerDirY(float valeur)
     player.dirY = valeur;
 
 }
-
 
 
 
@@ -187,7 +187,6 @@ int getLifeMax(void)
 
 
 
-
 void killPlayer(void)
 {
     /* On met le timer à 1 pour tuer le joueur instantanément */
@@ -229,6 +228,7 @@ int getHurts(void)
 void initializePlayer(int newLevel)
 {
     /* PV à 3 */
+
     player.lifeMax = 12;
     player.life = 12;
 
@@ -279,30 +279,8 @@ void drawPlayer(void)
     /* Gestion du timer */
 
     /* Si notre timer (un compte à rebours en fait) arrive à zéro */
-    if(player.frameTimer <= 0 && player.etat <= WALK_DOWN)
-    {
-        /* On le réinitialise */
-        player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
-
-        /*Et on incrémente notre variable qui compte les frames de 1 pour passer
-        à la suivante */
-        player.frameNumber++;
-
-        /* Mais si on dépasse la frame max, il faut revenir à la première : */
-        if(player.frameNumber >= player.frameMax) player.frameNumber = 0;
-    }
-    /* Sinon, on décrémente notre timer */
-    else player.frameTimer--;
-
-    /* Gestion du timer quand il est en mode attaque */
-    if(player.frameTimer <= 0 && player.etat >= ATTACK_HORIZONTAL)
-    {
-        player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
-        player.frameNumber++;
-
-        if(player.frameNumber >= player.frameMax) player.etat = player.saveEtat;
-    }
-    else player.frameTimer--;
+    if(player.etat <= WALK_DOWN) walkFrameTimer();
+    else attackFrameTimer();
 
     /* Ensuite, on peut passer la main à notre fonction */
 
@@ -333,51 +311,21 @@ void drawPlayer(void)
     src.y = player.etat * player.h;
 
     /* Si on a été touché, et qu'on est invincible */
-    if(player.invincibleTimer > 0)
-    {
-        /* On fait clignoter le héros une frame sur deux; Pour ça, on calcule
-        si le numéro de la frame est un multiple de deux */
-        if(player.frameNumber % 2 == 0)
-        {
-            /* Gestion du flip (retournement de l'image selon que le sprite regarde à droite ou
-            à gauche */
-            if (player.direction == LEFT) SDL_RenderCopyEx(getRenderer(),
-                        playerSpriteSheet, &src, &dest, 0, 0,
-                        SDL_FLIP_HORIZONTAL);
+    int q;
 
-            else if (player.direction == RIGHT) SDL_RenderCopyEx(getRenderer(),
-                        playerSpriteSheet, &src, &dest, 0, 0,
-                        SDL_FLIP_NONE);
+    if(player.invincibleTimer > 0) q = 2;
+    else q = 1;
 
-            else if (player.direction == UP) SDL_RenderCopyEx(getRenderer(),
-                        playerSpriteSheet, &src, &dest, 0, 0,
-                        SDL_FLIP_NONE);
-
-            else if (player.direction == DOWN) SDL_RenderCopyEx(getRenderer(),
-                        playerSpriteSheet, &src, &dest, 0, 0,
-                        SDL_FLIP_NONE);
-        }
-    }
-    /* Sinon on dessine normalement */
-    else
+    /* On fait clignoter le héros une frame sur deux; Pour ça, on calcule
+    si le numéro de la frame est un multiple de deux */
+    if(player.frameNumber % q == 0)
     {
         /* Gestion du flip (retournement de l'image selon que le sprite regarde à droite ou
         à gauche */
-        if (player.direction == LEFT) SDL_RenderCopyEx(getRenderer(),
-                    playerSpriteSheet, &src, &dest, 0, 0,
-                    SDL_FLIP_HORIZONTAL);
+        const SDL_RendererFlip flip =
+            player.direction == LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-        else if (player.direction == RIGHT) SDL_RenderCopyEx(getRenderer(),
-                    playerSpriteSheet, &src, &dest, 0, 0,
-                    SDL_FLIP_NONE);
-
-        else if (player.direction == UP) SDL_RenderCopyEx(getRenderer(),
-                    playerSpriteSheet, &src, &dest, 0, 0,
-                    SDL_FLIP_NONE);
-
-        else if (player.direction == DOWN) SDL_RenderCopyEx(getRenderer(),
-                    playerSpriteSheet, &src, &dest, 0, 0,
-                    SDL_FLIP_NONE);
+        SDL_RenderCopyEx(getRenderer(), playerSpriteSheet, &src, &dest, 0, 0, flip);
     }
 
 }
@@ -390,11 +338,8 @@ void updatePlayer(Input *input)
     Si le timer vaut 0, c'est que tout va bien, sinon, on le décrémente jusqu'à 0, et là,
     on réinitialise.
     C'est pour ça qu'on ne gère le joueur que si ce timer vaut 0. */
-
-
     if(player.timerMort == 0)
     {
-
         if(!player.touche) // S'il n'est pas touché
         {
             /* On gère le timer de l'invincibilité */
@@ -407,64 +352,16 @@ void updatePlayer(Input *input)
             player.estEnTrainDAttaquer = 0;
 
             gestionAttaque(input, &player);
-            fprintf(stderr, "%d\n\n", input->pressed);
 
             if(player.etat < ATTACK_HORIZONTAL && input->pressed < 3) playerDirection(input, &player);
 
             /* Si on n'appuie sur rien, on charge l'animation marquant l'inactivité (Idle), je n'ai pas regarder encore si je pouvais l'optimiser */
-            if((!input->right && !input->left && input->pressed <= 1) || (input->left && input->right) || ((input->left || input->right) && (input->up && input->down)))
-            {
-                if(input->left && input->right) player.attack = 1;
-                /* On teste si le joueur n'était pas déjà inactif, pour ne pas recharger l'animation
-                à chaque tour de boucle */
-                if(player.etat == WALK_HORIZONTAL)
-                {
-                    player.dirX = 0;
-                    player.dirY = 0;
-
-                    /* On enregistre l'anim' de l'inactivité et on l'initialise à 0 */
-                    player.etat = IDLE_HORIZONTAL;
-                    player.frameNumber = 0;
-                    player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
-                    player.frameMax = 9;
-                }
-            }
-
-            /* Idem qu'au-dessus mais pour l'axe Y */
-            if((!input->up && !input->down && input->pressed <= 1) || (input->up && input->down) || ((input->up || input->down) && (input->left && input->right)))
-            {
-                if(input->up && input->down) player.attack = 1;
-
-                if(player.etat == WALK_UP)
-                {
-                    player.dirX = 0;
-                    player.dirY = 0;
-
-                    player.etat = IDLE_UP;
-                    player.frameNumber = 0;
-                    player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
-                    player.frameMax = 9;
-                }
-
-                if(player.etat == WALK_DOWN)
-                {
-                    player.dirX = 0;
-                    player.dirY = 0;
-
-                    player.etat = IDLE_DOWN;
-                    player.frameNumber = 0;
-                    player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
-                    player.frameMax = 9;
-                }
-            }
+            playerIdle(input, &player);
 
             resetInput(input);
         }
         /* Sinon si il est touché */
-        else if(player.touche)
-        {
-            entityTouch(&player);
-        }
+        else if(player.touche) entityTouch(&player);
 
         /* On rajoute notre fonction de détection des collisions qui va mettre à
         jour les coordonnées de notre héros. */
@@ -485,10 +382,6 @@ void updatePlayer(Input *input)
         player.timerMort--;
         if(player.timerMort == 0)
         {
-            /* Si on est mort, on perd une vie... */
-            //setNombreDeVies(getNombreDeVies() - 1);
-
-            /* ...et on réinitialise le niveau */
             changeLevel();
             initializePlayer(0);
         }
@@ -570,3 +463,38 @@ void centerScrollingOnPlayer(void)
 
 
 
+void walkFrameTimer(void)
+{
+    if(player.frameTimer <= 0)
+    {
+        /* On le réinitialise */
+        player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
+
+        /*Et on incrémente notre variable qui compte les frames de 1 pour passer
+        à la suivante */
+        player.frameNumber++;
+
+        /* Mais si on dépasse la frame max, il faut revenir à la première : */
+        if(player.frameNumber >= player.frameMax) player.frameNumber = 0;
+    }
+    /* Sinon, on décrémente notre timer */
+    else player.frameTimer--;
+
+}
+
+
+
+void attackFrameTimer(void)
+{
+    if(player.frameTimer <= 0)
+    {
+        player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
+        player.frameNumber++;
+    fprintf(stderr, "%d\n\n", player.frameNumber);
+
+
+        if(player.frameNumber >= player.frameMax) player.etat = player.saveEtat;
+    }
+    else player.frameTimer--;
+
+}

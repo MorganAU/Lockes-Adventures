@@ -207,10 +207,66 @@ void playerUp(Input *input, GameObject *entity)
 
 void playerDirection(Input *input, GameObject *entity)
 {
-    playerLeft(input, entity); //Idem que ton code mais en fonction :)
+    playerLeft(input, entity);
     playerDown(input, entity);
     playerUp(input, entity);
     playerRight(input, entity);
+
+}
+
+
+
+void playerIdleHorizontale(GameObject *entity)
+{
+    /* On teste si le joueur n'était pas déjà inactif, pour ne pas recharger l'animation
+    à chaque tour de boucle */
+    if(entity->etat == WALK_HORIZONTAL)
+    {
+        entity->dirX = 0;
+        entity->dirY = 0;
+
+        /* On enregistre l'anim' de l'inactivité et on l'initialise à 0 */
+        entity->etat = IDLE_HORIZONTAL;
+        entity->frameNumber = 0;
+        entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
+        entity->frameMax = 9;
+    }
+
+}
+
+
+
+void playerIdleVerticale(GameObject *entity)
+{
+    if(entity->etat == WALK_UP || entity->etat == WALK_DOWN)
+    {
+        entity->dirX = 0;
+        entity->dirY = 0;
+        entity->etat = entity->etat == WALK_UP ? IDLE_UP : IDLE_DOWN;
+        entity->frameNumber = 0;
+        entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
+        entity->frameMax = 9;
+    }
+
+}
+
+
+
+void playerIdle(Input *input, GameObject *entity)
+{
+    if((!input->right && !input->left && input->pressed <= 1) || (input->left && input->right) || ((input->left || input->right) && (input->up && input->down)))
+    {
+        if(input->left && input->right) entity->attack = 1;
+        playerIdleHorizontale(entity);
+        fprintf(stderr, "r");
+    }
+
+    /* Idem qu'au-dessus mais pour l'axe Y */
+    if((!input->up && !input->down && input->pressed <= 1) || (input->up && input->down) || ((input->up || input->down) && (input->left && input->right)))
+    {
+        if(input->up && input->down) entity->attack = 1;
+        playerIdleVerticale(entity);
+    }
 
 }
 
@@ -249,9 +305,9 @@ void setEntityDirY(GameObject *entity, float valeur)
 void touchDirLeft(GameObject *defenseur, GameObject attaquant)
 {
 
-        setEntityDirX(defenseur, PLAYER_HURT);
-        if(defenseur->y + defenseur->h / 2 <= attaquant.y + attaquant.h / 2) setEntityDirY(defenseur, -PLAYER_HURT);
-        else setEntityDirY(defenseur, PLAYER_HURT);
+    setEntityDirX(defenseur, PLAYER_HURT);
+    if(defenseur->y + defenseur->h / 2 <= attaquant.y + attaquant.h / 2) setEntityDirY(defenseur, -PLAYER_HURT);
+    else setEntityDirY(defenseur, PLAYER_HURT);
 
 }
 
@@ -259,9 +315,9 @@ void touchDirLeft(GameObject *defenseur, GameObject attaquant)
 
 void touchDirRight(GameObject *defenseur, GameObject attaquant)
 {
-        setEntityDirX(defenseur, -PLAYER_HURT);
-        if(defenseur->y + defenseur->h / 2  <= attaquant.y + attaquant.h / 2) setEntityDirY(defenseur, -PLAYER_HURT);
-        else setEntityDirY(defenseur, PLAYER_HURT);
+    setEntityDirX(defenseur, -PLAYER_HURT);
+    if(defenseur->y + defenseur->h / 2  <= attaquant.y + attaquant.h / 2) setEntityDirY(defenseur, -PLAYER_HURT);
+    else setEntityDirY(defenseur, PLAYER_HURT);
 
 }
 
@@ -269,9 +325,9 @@ void touchDirRight(GameObject *defenseur, GameObject attaquant)
 
 void touchDirUp(GameObject *defenseur, GameObject attaquant)
 {
-        setEntityDirY(defenseur, PLAYER_HURT);
-        if(defenseur->x + defenseur->w / 2  <= attaquant.x + attaquant.w / 2) setEntityDirX(defenseur, -PLAYER_HURT);
-        else setEntityDirX(defenseur, PLAYER_HURT);
+    setEntityDirY(defenseur, PLAYER_HURT);
+    if(defenseur->x + defenseur->w / 2  <= attaquant.x + attaquant.w / 2) setEntityDirX(defenseur, -PLAYER_HURT);
+    else setEntityDirX(defenseur, PLAYER_HURT);
 
 }
 
@@ -279,9 +335,9 @@ void touchDirUp(GameObject *defenseur, GameObject attaquant)
 
 void touchDirDown(GameObject *defenseur, GameObject attaquant)
 {
-        setEntityDirY(defenseur, -PLAYER_HURT);
-        if(defenseur->x + defenseur->w / 2  <= attaquant.x + attaquant.w / 2) setEntityDirX(defenseur, -PLAYER_HURT);
-        else setEntityDirX(defenseur, PLAYER_HURT);
+    setEntityDirY(defenseur, -PLAYER_HURT);
+    if(defenseur->x + defenseur->w / 2  <= attaquant.x + attaquant.w / 2) setEntityDirX(defenseur, -PLAYER_HURT);
+    else setEntityDirX(defenseur, PLAYER_HURT);
 
 }
 
