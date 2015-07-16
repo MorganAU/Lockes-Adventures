@@ -347,9 +347,7 @@ void updatePlayer(Input *input)
 
             /* On réinitialise notre vecteur de déplacement latéral (X), pour éviter que le perso
             ne fonce de plus en plus */
-            player.dirX = 0;
-            player.dirY = 0;
-            player.estEnTrainDAttaquer = 0;
+            player.dirX = player.dirY = player.estEnTrainDAttaquer = 0;
 
             gestionAttaque(input, &player);
 
@@ -361,7 +359,7 @@ void updatePlayer(Input *input)
             resetInput(input);
         }
         /* Sinon si il est touché */
-        else if(player.touche) entityTouch(&player);
+        else if(player.touche) entityTouch();
 
         /* On rajoute notre fonction de détection des collisions qui va mettre à
         jour les coordonnées de notre héros. */
@@ -490,11 +488,23 @@ void attackFrameTimer(void)
     {
         player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
         player.frameNumber++;
-    fprintf(stderr, "%d\n\n", player.frameNumber);
-
 
         if(player.frameNumber >= player.frameMax) player.etat = player.saveEtat;
     }
     else player.frameTimer--;
+
+}
+
+
+
+void entityTouch(void)
+{
+    if(player.timerTouch <= 0)
+    {
+        player.timerTouch = 20;
+        player.touche = 0;
+
+    }
+    else player.timerTouch--;
 
 }

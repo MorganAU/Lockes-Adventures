@@ -3,16 +3,14 @@
 /* Direction aléatoire du monstre */
 int randomDirection(GameObject *entity)
 {
-    int i;
     float borneMinimale = 1; /* Le résultat doit être entre 1 et 4 inclut */
     float borneMaximale = 4;
 
+    /*Le monstre alterne entre un déplacement aléatoire de 100 ms et
+    un moment d'inactivité de 50 ms */
 
-
-    /*Le monstre alterne entre un déplacement aléatoire de 100 ms et un moment d'inactivité de 50 ms */
-    if(entity->name != MASTER_BLAGULE)
+    if(entity->borned)
     {
-
         if(entity->timerRandDir <= 0)
         {
             srand((unsigned)time(NULL));
@@ -26,12 +24,13 @@ int randomDirection(GameObject *entity)
             }
             else
             {
-                for(i = 0 ; i < 200000 ; i++)
+                for(int i = 0 ; i < 200000 ; i++)
                 {
                     entity->directionAleatoire = rand();
                     entity->directionAleatoire = (int)(entity->directionAleatoire * (borneMaximale + 1 - borneMinimale)
                                                        / RAND_MAX + borneMinimale );
                 }
+
                 entity->timerRandDir = 100;
                 entity->frameNumber = 0;
                 entity->etat -= 1;
@@ -44,16 +43,6 @@ int randomDirection(GameObject *entity)
 
 }
 
-
-/* La fonction pour l'alternative, mais elle ne me plaît pas :( */
-void secondDirection(GameObject *entity)
-{
-    if(entity->direction == RIGHT) randomDirection(entity);
-    if(entity->direction == LEFT) randomDirection(entity);
-    if(entity->direction == DOWN) randomDirection(entity);
-    if(entity->direction == UP) randomDirection(entity);
-
-}
 
 
 /* Les quatre fonctions de direction du joueur */
@@ -258,7 +247,6 @@ void playerIdle(Input *input, GameObject *entity)
     {
         if(input->left && input->right) entity->attack = 1;
         playerIdleHorizontale(entity);
-        fprintf(stderr, "r");
     }
 
     /* Idem qu'au-dessus mais pour l'axe Y */
@@ -267,20 +255,6 @@ void playerIdle(Input *input, GameObject *entity)
         if(input->up && input->down) entity->attack = 1;
         playerIdleVerticale(entity);
     }
-
-}
-
-
-
-void entityTouch(GameObject *entity)
-{
-    if(entity->timerTouch <= 0)
-    {
-        entity->timerTouch = 20;
-        entity->touche = 0;
-
-    }
-    else entity->timerTouch--;
 
 }
 

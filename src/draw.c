@@ -8,8 +8,6 @@ int one;
 
 void drawGame(void)
 {
-    int i;
-
     /* Affiche le background aux coordonnées (0,0) */
     drawImage(getBackground(), 0, 0);
 
@@ -24,7 +22,7 @@ void drawGame(void)
     drawOnehand();
 
     /* Affiche les monstres */
-    for(i  = 0 ; i < getMonsterNumber() ; i++) drawMonster(getMonster(i));
+    for(int i  = 0 ; i < getMonsterNumber() ; i++) drawMonster(getMonster(i));
 
     /* Affiche la map de tiles : layer 3 (couche en foreground / devant) */
     drawMap(3);
@@ -48,7 +46,7 @@ SDL_Texture *loadImage(char *name)
     SDL_Surface *loadedImage = IMG_Load(name);
     SDL_Texture *texture = NULL;
 
-    if (loadedImage != NULL)
+    if(loadedImage != NULL)
     {
         /* Conversion de l'image en texture */
         texture = SDL_CreateTextureFromSurface(getRenderer(), loadedImage);
@@ -236,8 +234,8 @@ void drawCoinPlayer(void)
 
     drawString(text, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 54, 0, 0, 0, 255);
 
-    /*sprintf(text, "pressed = %d", input->pressed);
-    drawString(text, 10, SCREEN_HEIGHT - 70, 255, 0, 0, 255);
+    sprintf(text, "pressed =");
+    drawString(text, 10, SCREEN_HEIGHT - 70, 255, 0, 0, 255);/*
         sprintf(text, "input1 = %d", input->input1);
     drawString(text, 10, SCREEN_HEIGHT - 55, 255, 0, 0, 255);
     sprintf(text, "input2 = %d", input->input2);

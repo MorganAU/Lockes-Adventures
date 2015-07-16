@@ -281,7 +281,7 @@ void monsterBlitt(int name, int etat, int frameNumber, int *w, int *h, int *x, i
 
 int monsterMoves(GameObject *entity, int name)
 {
-    if(name == BLAGULE) return blaguleRandomMoves(entity);
+    if(name == BLAGULE) return randomDirection(entity);
     else if(name == MASTER_BLAGULE) return 0;
     else return 0;
 

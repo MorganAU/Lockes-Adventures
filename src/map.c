@@ -81,7 +81,6 @@ void loadMap(char *name)
 
     /* Lit les données du fichier dans la map */
 
-
     /* Lit les coordonnées de début du joueur */
     fscanf(fp, "%d", &map.beginx);
     fscanf(fp, "%d", &map.beginy);
@@ -610,7 +609,7 @@ void monsterCollisionToMap(GameObject *entity)
                     entity->x = x2 * TILE_SIZE;
                     entity->x -= entity->w + 1;
                     entity->dirX = 0;
-                    secondDirection(entity);
+                    entity->timerRandDir = 0;
                 }
             }
             /* Même chose à gauche */
@@ -620,7 +619,7 @@ void monsterCollisionToMap(GameObject *entity)
                 {
                     entity->x = (x1 + 1) * TILE_SIZE;
                     entity->dirX = 0;
-                    secondDirection(entity);
+                    entity->timerRandDir = 0;
                 }
             }
         }
@@ -658,8 +657,7 @@ void monsterCollisionToMap(GameObject *entity)
                     entity->y = y2 * TILE_SIZE;
                     entity->y -= entity->h;
                     entity->dirY = 0;
-                    secondDirection(entity);
-
+                    entity->timerRandDir = 0;
                 }
             }
             else if(entity->dirY < 0)
@@ -669,7 +667,7 @@ void monsterCollisionToMap(GameObject *entity)
                 {
                     entity->y = (y1 + 1) * TILE_SIZE;
                     entity->dirY = 0;
-                    secondDirection(entity);
+                    entity->timerRandDir = 0;
                 }
             }
         }
@@ -683,33 +681,6 @@ void monsterCollisionToMap(GameObject *entity)
     }
 
     /* Maintenant, on applique les vecteurs de mouvement si le sprite n'est pas bloqué */
-
-    /* Et on contraint son déplacement aux limites de l'écran. */
-//    if(entity->x < map.startX)
-//    {
-//        //entity->x = map.startX + 1;
-//        /* Alternative si jamais le monstre touche une tile solide ou le bord de la map... A améliorer plus tard */
-//        secondDirection(entity);
-//    }
-//    else if(entity->x + entity->w >= map.maxX)
-//    {
-//        /* Si on touche le bord droit de l'écran, on annule
-//        et on limite le déplacement du joueur */
-//        entity->x = map.maxX - entity->w - 1;
-//        secondDirection(entity);
-//    }
-
-//    if(entity->y < map.startY)
-//   {
-//        //entity->y = map.startY + 1;
-//        secondDirection(entity);
-//    }
-//    else if(entity->y + entity->h >= map.maxY)
-//    {
-//        entity->y = map.maxY - entity->h - 1;
-//        secondDirection(entity);
-//    }
-
     entity->x += entity->dirX;
     entity->y += entity->dirY;
 

@@ -20,7 +20,7 @@ void loadFont(char *name, int size)
 
 
 
-void closeFont()
+void closeFont(void)
 {
     /* On ferme la police (font) */
     if(font != NULL) TTF_CloseFont(font);
@@ -43,17 +43,13 @@ void drawString(char *text, int x, int y, int r, int g, int b, int a)
     foregroundColor.b = b;
     foregroundColor.a = a;
 
-    foregroundColorOption.r = 255;
-    foregroundColorOption.g = 255;
-    foregroundColorOption.b = 255;
-    foregroundColorOption.a = 255;
-
+    foregroundColorOption.r = foregroundColorOption.g = foregroundColorOption.b = foregroundColorOption.a = 255;
 
     /* On utilise SDL_TTF pour générer une SDL_Surface à partir d'une chaîne de caractères (string) */
     surface = TTF_RenderUTF8_Blended(font, text, foregroundColor);
     surfaceOption = TTF_RenderUTF8_Blended(font, text, foregroundColorOption);
 
-    if(surface != NULL || surfaceOption == NULL)
+    if(surface != NULL && surfaceOption != NULL)
     {
 
         /* Conversion de l'image en texture */

@@ -56,7 +56,7 @@ typedef struct GameObject
     /* Points de vie/santé + chrono d'invincibilité */
     int life, lifeMax, invincibleTimer;
 
-    int name, borned;
+    int name, borned, blocked;
 
     /* Coordonnées du sprite */
     int x, y;
@@ -86,7 +86,7 @@ typedef struct GameObject
         dans laquelle il se déplace */
         int etat, direction;
         float directionAleatoire;
-        int saveEtat, saveDirection;
+        int saveEtat, saveDirection, saveDirection2;
 
 
     /*Variables utiles pour la gestion des collisions :

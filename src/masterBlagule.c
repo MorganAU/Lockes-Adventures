@@ -4,12 +4,10 @@ int count = 5;
 
 int getMasterBlaguleWidth(int frame)
 {
-    int width;
-
-    if(frame <= 35) width = 138;
-    else if(frame > 35) width = 160;
-
-    return width;
+    if(frame <= 35)
+        return 138;
+    else //if(frame > 35)
+        return 160;
 
 }
 
@@ -25,15 +23,14 @@ int getMasterBlaguleHeight(int frame)
 
 int getMasterBlaguleSourceX(int frame)
 {
-    int srcX;
-
-    if(frame <= 35) srcX = 0;
-    else if(frame == 37 || frame == 39 || frame == 41 || frame == 43 || frame == 45 || frame == 47 || frame == 49) srcX = 138;
-    else if(frame == 36 || frame == 38 || frame == 40 || frame == 42 || frame == 44 || frame == 46 || frame == 48 || frame == 50) srcX = 298;
+    if(frame <= 35)
+        return 0;
+    else if(frame == 37 || frame == 39 || frame == 41 || frame == 43 || frame == 45 || frame == 47 || frame == 49)
+        return 138;
+    else //if(frame == 36 || frame == 38 || frame == 40 || frame == 42 || frame == 44 || frame == 46 || frame == 48 || frame == 50)
+        return 298;
 
     if(frame == 50) masterBlaguleAttack();
-
-    return srcX;
 
 }
 

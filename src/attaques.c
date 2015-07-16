@@ -14,17 +14,20 @@ void gestionAttaque(Input *input, GameObject *entity)
         entity->estEnTrainDAttaquer = 1;
         playSoundFx(ONEHANDSWORD);
     }
+
+    /* Réinitialise l'attaque */
     if(entity->attack && !input->attack) entity->attack = 0;
 
 }
 
 
 
-int canAttack(GameObject *entity) //Vérifie si le joueur peu attaquer
+int canAttack(GameObject *entity) //Vérifie si le joueur peut attaquer
 {
-    if(!entity->attack) entity->canSwordAttack = 1;
+    if(!entity->attack) return entity->canSwordAttack = 1;
+    else return 0;
 
-    return entity->canSwordAttack;
+
 }
 
 
@@ -34,31 +37,14 @@ void drawOneHandAttack(GameObject *entity) // Pour dessiner l'attaque (le geste 
     entity->dirX = 0;
     entity->dirY = 0;
 
-    if(entity->direction == LEFT || entity->direction == RIGHT)
-    {
-        /* On enregistre l'anim' de la marche et on l'initialise à 0 */
-        entity->etat = ATTACK_HORIZONTAL;
-        entity->frameNumber = 0;
-        entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
-        entity->frameMax = 5;
+    entity->etat = entity->direction == LEFT || entity->direction == RIGHT ? ATTACK_HORIZONTAL :
+                   entity->direction == DOWN ? ATTACK_DOWN :
+                   entity->direction == UP ? ATTACK_UP :
+                   0 ;
 
-    }
-
-    if(entity->direction == DOWN)
-    {
-        entity->etat = ATTACK_DOWN;
-        entity->frameNumber = 0;
-        entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
-        entity->frameMax = 5;
-    }
-
-    if(entity->direction == UP)
-    {
-        entity->etat = ATTACK_UP;
-        entity->frameNumber = 0;
-        entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
-        entity->frameMax = 5;
-    }
+    entity->frameNumber = 0;
+    entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
+    entity->frameMax = 5;
 
     entity->attack = entity->canSwordAttack;
     entity->canSwordAttack = 0;
