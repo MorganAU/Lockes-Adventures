@@ -145,12 +145,12 @@ void loadGame(void)
     initPlayerSprites();
 
     /* On commence au premier niveau */
-    setValeurDuNiveau(1);
+    setLevelNumber(1);
     changeLevel();
 
     /* On initialise les variables du jeu */
-    setNombreDeVies(3);
-    setNombreDetoiles(0);
+    setLifeNumber(3);
+    setStarNumber(0);
 
     /* On charge le HUD */
     initHUD();

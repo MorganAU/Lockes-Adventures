@@ -17,7 +17,7 @@ GameObject *getPlayer(void)
 
 int getAttack(void)
 {
-    return player.estEnTrainDAttaquer;
+    return player.isAttacking;
 
 }
 
@@ -49,15 +49,6 @@ int getPlayery(void)
 
 
 
-/* Change la valeur des coordonnées x du héros */
-void setPlayerx(int valeur)
-{
-    player.x = valeur;
-
-}
-
-
-
 int getPlayerFrameNumber(void)
 {
     return player.frameNumber;
@@ -69,15 +60,6 @@ int getPlayerFrameNumber(void)
 int getPlayerDirection(void)
 {
     return player.direction;
-
-}
-
-
-
-/* Change la valeur des coordonnées y du héros */
-void setPlayery(int valeur)
-{
-    player.y = valeur;
 
 }
 
@@ -109,7 +91,7 @@ int getLevel(void)
 
 
 /* Change la valeur du niveau en cours */
-void setValeurDuNiveau(int valeur)
+void setLevelNumber(int valeur)
 {
     level = valeur;
 
@@ -117,7 +99,7 @@ void setValeurDuNiveau(int valeur)
 
 
 
-int getNombreDeVies(void)
+int getLifeNumber(void)
 {
     return vies;
 
@@ -125,7 +107,7 @@ int getNombreDeVies(void)
 
 
 
-void setNombreDeVies(int valeur)
+void setLifeNumber(int valeur)
 {
     vies = valeur;
 
@@ -133,7 +115,7 @@ void setNombreDeVies(int valeur)
 
 
 
-int getNombreDetoiles(void)
+int getStarNumber(void)
 {
     return etoiles;
 
@@ -141,7 +123,15 @@ int getNombreDetoiles(void)
 
 
 
-void setNombreDetoiles(int valeur)
+int getTouch(void)
+{
+    return player.touch;
+
+}
+
+
+
+void setStarNumber(int valeur)
 {
     etoiles = valeur;
 
@@ -191,6 +181,8 @@ void killPlayer(void)
 {
     /* On met le timer à 1 pour tuer le joueur instantanément */
     player.timerMort = 1;
+    player.dirX = 0;
+    player.dirY = 0;
 
     /* On joue le son */
     playSoundFx(DESTROY);
@@ -202,23 +194,23 @@ void killPlayer(void)
 void playerHurts(GameObject entity)
 {
     /* Si le timer d'invincibilité est à 0, on perd un coeur */
-    if(player.invincibleTimer == 0)
+    if(player.invincibleTimer == 0 && !player.touch)
     {
-        player.life--; //En commentaire, toujours pour les tests
+        player.life--;
         player.invincibleTimer = 10;
+        player.touch = 1;
 
         touchDir(player.direction, &player, entity);
 
         playSoundFx(DESTROY);
-        player.touche = 1;
-    }
 
+    }
 }
 
 
 int getHurts(void)
 {
-    return player.touche;
+    return player.touch;
 
 }
 
@@ -238,7 +230,7 @@ void initializePlayer(int newLevel)
 
     /* Indique l'état et la direction de notre héros */
     player.direction = DOWN;
-    player.etat = IDLE_DOWN;
+    player.state = IDLE_DOWN;
 
     /* Indique le numéro de la frame où commencer */
     player.frameNumber = 0;
@@ -253,7 +245,7 @@ void initializePlayer(int newLevel)
     player.y = getBeginY();
 
     /* On réinitialise les coordonnées de la caméra si on change de niveau */
-    if(newLevel == 1)
+    if(newLevel)
     {
         setStartX(getBeginX());
         setStartY(getBeginY());
@@ -279,7 +271,7 @@ void drawPlayer(void)
     /* Gestion du timer */
 
     /* Si notre timer (un compte à rebours en fait) arrive à zéro */
-    if(player.etat <= WALK_DOWN) walkFrameTimer();
+    if(player.state <= WALK_DOWN) walkFrameTimer();
     else attackFrameTimer();
 
     /* Ensuite, on peut passer la main à notre fonction */
@@ -308,7 +300,7 @@ void drawPlayer(void)
     Aucun mouvement (Idle) = 0, marche (walk) = 1, etc...
     Tout cela en accord avec notre spritesheet, of course ;) */
 
-    src.y = player.etat * player.h;
+    src.y = player.state * player.h;
 
     /* Si on a été touché, et qu'on est invincible */
     int q;
@@ -340,18 +332,18 @@ void updatePlayer(Input *input)
     C'est pour ça qu'on ne gère le joueur que si ce timer vaut 0. */
     if(player.timerMort == 0)
     {
-        if(!player.touche) // S'il n'est pas touché
+        if(!player.touch) // S'il n'est pas touché
         {
             /* On gère le timer de l'invincibilité */
             if(player.invincibleTimer > 0) player.invincibleTimer--;
 
             /* On réinitialise notre vecteur de déplacement latéral (X), pour éviter que le perso
             ne fonce de plus en plus */
-            player.dirX = player.dirY = player.estEnTrainDAttaquer = 0;
+            player.dirX = player.dirY = player.isAttacking = 0;
 
-            gestionAttaque(input, &player);
+            attackManagement(input, &player);
 
-            if(player.etat < ATTACK_HORIZONTAL && input->pressed < 3) playerDirection(input, &player);
+            if(player.state < ATTACK_HORIZONTAL && input->puched < 3) playerDir(input, &player);
 
             /* Si on n'appuie sur rien, on charge l'animation marquant l'inactivité (Idle), je n'ai pas regarder encore si je pouvais l'optimiser */
             playerIdle(input, &player);
@@ -359,7 +351,8 @@ void updatePlayer(Input *input)
             resetInput(input);
         }
         /* Sinon si il est touché */
-        else if(player.touche) entityTouch();
+        else if(player.touch)
+            entityTouch();
 
         /* On rajoute notre fonction de détection des collisions qui va mettre à
         jour les coordonnées de notre héros. */
@@ -489,7 +482,7 @@ void attackFrameTimer(void)
         player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK;
         player.frameNumber++;
 
-        if(player.frameNumber >= player.frameMax) player.etat = player.saveEtat;
+        if(player.frameNumber >= player.frameMax) player.state = player.saveState;
     }
     else player.frameTimer--;
 
@@ -502,9 +495,10 @@ void entityTouch(void)
     if(player.timerTouch <= 0)
     {
         player.timerTouch = 20;
-        player.touche = 0;
+        player.touch = 0;
 
     }
     else player.timerTouch--;
+
 
 }

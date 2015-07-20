@@ -8,6 +8,10 @@ void drawOnehand(void)
 {
     GameObject *entity = getPlayer();
 
+    int x, y;
+
+    getOneHandDest(&x, &y);
+
     /* Différentes valeurs en fonction de la direction, pour que les collisions soient plus précises */
     oneHand.w = getPlayerDirection() == RIGHT || getPlayerDirection() == LEFT ? SWORD_WIDTH_HORIZONTAL :
                 getPlayerDirection() == DOWN ? SWORD_WIDTH_DOWN :
@@ -21,8 +25,8 @@ void drawOnehand(void)
 
     SDL_Rect dest;
 
-    dest.x = getPlayerx() - getStartX() + getOneHandX(); //Il faut le x du joueur avec getPlayerx et getStartX
-    dest.y = getPlayery() - getStartY() + getOneHandY();
+    dest.x = getPlayerx() - getStartX() + x; //Il faut le x du joueur avec getPlayerx et getStartX
+    dest.y = getPlayery() - getStartY() + y;
     dest.w = oneHand.w;
     dest.h = oneHand.h;
 
@@ -32,11 +36,11 @@ void drawOnehand(void)
     src.w = oneHand.w;
     src.h = oneHand.h;
 
-    if(entity->etat >= ATTACK_HORIZONTAL)
+    if(entity->state >= ATTACK_HORIZONTAL)
     {
-        src.y = entity->etat == ATTACK_HORIZONTAL ? SWORD * PLAYER_HEIGHT :
-                entity->etat == ATTACK_DOWN ? SWORD * PLAYER_HEIGHT + SWORD_HEIGHT_HORIZONTAL :
-                entity->etat == ATTACK_UP ? SWORD * PLAYER_HEIGHT + SWORD_HEIGHT_HORIZONTAL + SWORD_HEIGHT_DOWN :
+        src.y = entity->state == ATTACK_HORIZONTAL ? SWORD * PLAYER_HEIGHT :
+                entity->state == ATTACK_DOWN ? SWORD * PLAYER_HEIGHT + SWORD_HEIGHT_HORIZONTAL :
+                entity->state == ATTACK_UP ? SWORD * PLAYER_HEIGHT + SWORD_HEIGHT_HORIZONTAL + SWORD_HEIGHT_DOWN :
                 0;
 
         const SDL_RendererFlip flip =
@@ -49,117 +53,89 @@ void drawOnehand(void)
 
 
 
-/* Fonction renvoyant le x en fonction de la frame */
-int getOneHandX(void)
+/* Série de fonctions renvoyant le x et le y en fonction de la frame */
+void getOneHandDest(int *x, int *y)
 {
     if(getPlayerDirection() == RIGHT)
-    {
-        if(getPlayerFrameNumber() <= 1)
-            return 26;
-        else if(getPlayerFrameNumber() == 2)
-            return 28;
-        else if(getPlayerFrameNumber() == 3)
-            return 27;
-        else //if(getPlayerFrameNumber() == 4)
-            return 25;
-    }
+        getOneHandDestRight(x, y);
     else if(getPlayerDirection() == LEFT)
-    {
-        if(getPlayerFrameNumber() <= 1)
-            return -13;
-        else if(getPlayerFrameNumber() == 2)
-            return -15;
-        else if(getPlayerFrameNumber() == 3)
-            return -14;
-        else //if(getPlayerFrameNumber() == 4)
-            return -12;
-    }
-    else if(getPlayerDirection() == DOWN)
-    {
-        if(getPlayerFrameNumber() == 0)
-            return 16;
-        else if(getPlayerFrameNumber() == 1)
-            return 14;
-        else if(getPlayerFrameNumber() == 2)
-            return 11;
-        else if(getPlayerFrameNumber() == 3)
-            return 7;
-        else //if(getPlayerFrameNumber() == 4)
-            return -5;
-    }
-    else //if(getPlayerDirection() == UP)
-    {
-        if(getPlayerFrameNumber() == 0)
-            return 0;
-        else if(getPlayerFrameNumber() == 1)
-            return 7;
-        else if(getPlayerFrameNumber() == 2)
-            return 13;
-        else if(getPlayerFrameNumber() == 3)
-            return 18;
-        else //if(getPlayerFrameNumber() == 4)
-            return 21;
-    }
-
-}
-
-
-
-/* Idem pour y */
-int getOneHandY(void)
-{
-    int y;
-
-    if(getPlayerDirection() == RIGHT)
-    {
-        if(getPlayerFrameNumber() == 0) y = 4;
-        else if(getPlayerFrameNumber() == 1) y = 5;
-        else if(getPlayerFrameNumber() == 2) y = 13;
-        else if(getPlayerFrameNumber() == 3) y = 24;
-        else if(getPlayerFrameNumber() == 4) y = 27;
-    }
-    else if(getPlayerDirection() == LEFT)
-    {
-        if(getPlayerFrameNumber() == 0) y = 4;
-        else if(getPlayerFrameNumber() == 1) y = 5;
-        else if(getPlayerFrameNumber() == 2) y = 13;
-        else if(getPlayerFrameNumber() == 3) y = 24;
-        else if(getPlayerFrameNumber() == 4) y = 27;
-    }
-    else if(getPlayerDirection() == DOWN)
-    {
-        if(getPlayerFrameNumber() == 0) y = 34;
-        else if(getPlayerFrameNumber() == 1) y = 35;
-        else if(getPlayerFrameNumber() == 2) y = 38;
-        else if(getPlayerFrameNumber() == 3) y = 35;
-        else if(getPlayerFrameNumber() == 4) y = 34;
-    }
+        getOneHandDestLeft(x, y);
     else if(getPlayerDirection() == UP)
-    {
-        if(getPlayerFrameNumber() == 0) y = -2;
-        else if(getPlayerFrameNumber() == 1) y = -6;
-        else if(getPlayerFrameNumber() == 2) y = -8;
-        else if(getPlayerFrameNumber() == 3) y = -6;
-        else if(getPlayerFrameNumber() == 4) y = -2;
-    }
-
-    return y;
+        getOneHandDestUp(x, y);
+    else if(getPlayerDirection() == DOWN)
+        getOneHandDestDown(x, y);
 
 }
+
+
+
+void getOneHandDestRight(int *x, int *y)
+{
+    getPlayerFrameNumber() == 0 ? (*x = 26, *y = 4) :
+    getPlayerFrameNumber() == 1 ? (*x = 26, *y = 5) :
+    getPlayerFrameNumber() == 2 ? (*x = 28, *y = 13) :
+    getPlayerFrameNumber() == 3 ? (*x = 27, *y = 24) :
+    getPlayerFrameNumber() == 4 ? (*x = 25, *y = 27) :
+    0;
+
+}
+
+
+
+void getOneHandDestLeft(int *x, int *y)
+{
+    getPlayerFrameNumber() == 0 ? (*x = -13, *y = 4) :
+    getPlayerFrameNumber() == 1 ? (*x = -13, *y = 5) :
+    getPlayerFrameNumber() == 2 ? (*x = -15, *y = 13) :
+    getPlayerFrameNumber() == 3 ? (*x = -14, *y = 24) :
+    getPlayerFrameNumber() == 4 ? (*x = -12, *y = 27) :
+    0;
+
+}
+
+
+
+void getOneHandDestUp(int *x, int *y)
+{
+    getPlayerFrameNumber() == 0 ? (*x = 0, *y = -2) :
+    getPlayerFrameNumber() == 1 ? (*x = 7, *y = -6) :
+    getPlayerFrameNumber() == 2 ? (*x = 13, *y = -8) :
+    getPlayerFrameNumber() == 3 ? (*x = 18, *y = -6) :
+    getPlayerFrameNumber() == 4 ? (*x = 21, *y = -2) :
+    0;
+
+}
+
+
+
+void getOneHandDestDown(int *x, int *y)
+{
+    getPlayerFrameNumber() == 0 ? (*x = 16, *y = 34) :
+    getPlayerFrameNumber() == 1 ? (*x = 14, *y = 35) :
+    getPlayerFrameNumber() == 2 ? (*x = 11, *y = 38) :
+    getPlayerFrameNumber() == 3 ? (*x = 7, *y = 35) :
+    getPlayerFrameNumber() == 4 ? (*x = -5, *y = 34) :
+    0;
+
+}
+
+
 
 
 
 /* Collision entre l'arme et le monstre */
 int oneHandHurt(int mX, int mY, int mW, int mH)
 {
-    int hitboxX, hitboxY, hitboxW, hitboxH;
+    int hitboxX, hitboxY, hitboxW, hitboxH, x, y;
+
+    getOneHandDest(&x, &y);
 
     /* Coordonnées de l'arme en fonction de la position du joueur */
-    int x = getOneHandX() + getPlayerx();
-    int y = getOneHandY() + getPlayery();
-    if(getAttack() == 1)
-    {
+    x = x + getPlayerx();
+    y = y + getPlayery();
 
+    if(getAttack())
+    {
         if(getPlayerDirection() == UP)
         {
             hitboxX = x - 5;
@@ -193,10 +169,13 @@ int oneHandHurt(int mX, int mY, int mW, int mH)
         if ((mX >= hitboxX + hitboxW)
                 || (mX + mW <= hitboxX)
                 || (mY >= hitboxY + hitboxH )
-                || (mY + mH <= hitboxY)) return 0;
-        else return 1;
+                || (mY + mH <= hitboxY))
+            return 0;
+        else
+            return 1;
     }
-    else return 0;
+    else
+        return 0;
 
 
 }

@@ -1,23 +1,23 @@
 #include "prototypes.h"
 
 
-int getBlaguleWidth(int frame, int statut, int borned)
+int getBlaguleWidth(int frame, int state, int borned)
 {
     if(borned)
     {
-        if(statut == IDLE_HORIZONTAL ||
-                ((statut == IDLE_UP || statut == IDLE_DOWN) && (frame == 0 || frame == 1)))
+        if(state == IDLE_HORIZONTAL ||
+                ((state == IDLE_UP || state == IDLE_DOWN) && (frame == 0 || frame == 1)))
             return 32;
-        else if((statut == WALK_HORIZONTAL && (frame == 0 || frame == 2)) ||
-                (statut == IDLE_DOWN && (frame == 2 || frame == 3)))
+        else if((state == WALK_HORIZONTAL && (frame == 0 || frame == 2)) ||
+                (state == IDLE_DOWN && (frame == 2 || frame == 3)))
             return 34;
-        else if(statut == IDLE_UP && (frame == 2 || frame == 3))
+        else if(state == IDLE_UP && (frame == 2 || frame == 3))
             return 35;
-        else if(statut == WALK_HORIZONTAL && (frame == 1 || frame == 3))
+        else if(state == WALK_HORIZONTAL && (frame == 1 || frame == 3))
             return 37;
-        else if((statut == WALK_UP || statut == WALK_DOWN) && (frame == 1 || frame == 3))
+        else if((state == WALK_UP || state == WALK_DOWN) && (frame == 1 || frame == 3))
             return 24;
-        else //if((statut == WALK_UP || statut == WALK_DOWN) && (frame == 0 || frame == 2))
+        else //if((state == WALK_UP || state == WALK_DOWN) && (frame == 0 || frame == 2))
             return 28;
     }
     else //if(!borned)
@@ -27,15 +27,15 @@ int getBlaguleWidth(int frame, int statut, int borned)
 
 
 
-int getBlaguleHeight(int frame, int statut, int borned)
+int getBlaguleHeight(int frame, int state, int borned)
 {
     if(borned)
     {
-        if(statut == IDLE_HORIZONTAL || statut == WALK_HORIZONTAL || statut == IDLE_UP || statut == IDLE_DOWN)
+        if(state == IDLE_HORIZONTAL || state == WALK_HORIZONTAL || state == IDLE_UP || state == IDLE_DOWN)
             return 24;
-        else if((statut == WALK_DOWN || statut == WALK_UP) && (frame == 0 || frame == 2))
+        else if((state == WALK_DOWN || state == WALK_UP) && (frame == 0 || frame == 2))
             return 31;
-        else //if((statut == WALK_DOWN || statut == WALK_UP) && (frame == 1 || frame == 3))
+        else //if((state == WALK_DOWN || state == WALK_UP) && (frame == 1 || frame == 3))
             return 37;
     }
     else //if(!borned)
@@ -45,24 +45,24 @@ int getBlaguleHeight(int frame, int statut, int borned)
 
 
 
-int getBlaguleSourceX(int frame, int statut, int borned)
+int getBlaguleSourceX(int frame, int state, int borned)
 {
     if(borned)
     {
-        if((statut == IDLE_HORIZONTAL && frame < 3) ||
-                ((statut == WALK_HORIZONTAL || statut == WALK_DOWN || statut == WALK_UP) && (frame == 0 || frame == 2)) ||
-                ((statut == IDLE_DOWN || statut == IDLE_UP) && frame <= 1))
+        if((state == IDLE_HORIZONTAL && frame < 3) ||
+                ((state == WALK_HORIZONTAL || state == WALK_DOWN || state == WALK_UP) && (frame == 0 || frame == 2)) ||
+                ((state == IDLE_DOWN || state == IDLE_UP) && frame <= 1))
             return 0;
-        else if((statut == WALK_DOWN || statut == WALK_UP) && (frame == 1 || frame == 3))
+        else if((state == WALK_DOWN || state == WALK_UP) && (frame == 1 || frame == 3))
             return 28;
-        else if((statut == IDLE_HORIZONTAL && frame == 3) ||
-                ((statut == IDLE_DOWN || statut == IDLE_UP) && frame == 2))
+        else if((state == IDLE_HORIZONTAL && frame == 3) ||
+                ((state == IDLE_DOWN || state == IDLE_UP) && frame == 2))
             return 32;
-        else if(statut == WALK_HORIZONTAL && (frame == 1 || frame == 3))
+        else if(state == WALK_HORIZONTAL && (frame == 1 || frame == 3))
             return 34;
-        else if(statut == IDLE_DOWN && frame == 3)
+        else if(state == IDLE_DOWN && frame == 3)
             return 66;
-        else //if(statut == IDLE_UP && frame == 3)
+        else //if(state == IDLE_UP && frame == 3)
             return 67;
     }
     else //if(!borned)
@@ -77,23 +77,23 @@ int getBlaguleSourceX(int frame, int statut, int borned)
 
 
 
-int getBlaguleSourceY(int frame, int statut, int borned)
+int getBlaguleSourceY(int frame, int state, int borned)
 {
     if(borned)
     {
-        if(statut == IDLE_HORIZONTAL)
+        if(state == IDLE_HORIZONTAL)
             return 0;
-        else if(statut == WALK_HORIZONTAL)
+        else if(state == WALK_HORIZONTAL)
             return 24;
-        else if(statut == IDLE_UP)
+        else if(state == IDLE_UP)
             return 48;
-        else if(statut == WALK_UP)
+        else if(state == WALK_UP)
             return 72;
-        else if(statut == IDLE_DOWN)
+        else if(state == IDLE_DOWN)
             return 109;
-        else if(statut == WALK_DOWN && (frame == 0 || frame == 2))
+        else if(state == WALK_DOWN && (frame == 0 || frame == 2))
             return 139;
-        else //if(statut == WALK_DOWN && (frame == 1 || frame == 3))
+        else //if(state == WALK_DOWN && (frame == 1 || frame == 3))
             return 133;
     }
     else //if(!borned)
@@ -103,12 +103,12 @@ int getBlaguleSourceY(int frame, int statut, int borned)
 
 
 
-void blaguleBlitt(int etat, int frameNumber, int *w, int *h, int *x, int *y, int borned)
+void blaguleBlitt(int state, int frameNumber, int *w, int *h, int *x, int *y, int borned)
 {
-    *w = getBlaguleWidth(frameNumber, etat, borned);
-    *h = getBlaguleHeight(frameNumber, etat, borned);
-    *x = getBlaguleSourceX(frameNumber, etat, borned);
-    *y = getBlaguleSourceY(frameNumber, etat, borned);
+    *w = getBlaguleWidth(frameNumber, state, borned);
+    *h = getBlaguleHeight(frameNumber, state, borned);
+    *x = getBlaguleSourceX(frameNumber, state, borned);
+    *y = getBlaguleSourceY(frameNumber, state, borned);
 
 }
 

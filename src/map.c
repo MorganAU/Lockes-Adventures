@@ -86,7 +86,7 @@ void loadMap(char *name)
     fscanf(fp, "%d", &map.beginy);
 
     /* Read the number of the tileset */
-    fscanf(fp, "%d", &map.tilesetAffiche);
+    fscanf(fp, "%d", &map.tilesetDisplay);
     map.maxX = map.maxY = 0;
     for(y = 0 ; y < MAX_MAP_Y ; y++)
     {
@@ -339,10 +339,10 @@ void changeLevel(void)
     if(map.tileSet != NULL) SDL_DestroyTexture(map.tileSet);
     if(map.tileSetB != NULL) SDL_DestroyTexture(map.tileSetB);
 
-    sprintf(file, "ressources/graphics/tileset%d.png", map.tilesetAffiche);
+    sprintf(file, "ressources/graphics/tileset%d.png", map.tilesetDisplay);
     map.tileSet = loadImage(file);
 
-    sprintf(file, "ressources/graphics/tileset%dB.png", map.tilesetAffiche);
+    sprintf(file, "ressources/graphics/tileset%dB.png", map.tilesetDisplay);
     map.tileSetB = loadImage(file);
 
 }

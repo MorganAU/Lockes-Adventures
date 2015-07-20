@@ -76,22 +76,22 @@ void getInput(Input *input)
                 break;
 
             case SDLK_LEFT:
-                if(input->left == 0) input->pressed++;
+                if(input->left == 0) input->puched++;
                 input->left = 1;
                 break;
 
             case SDLK_RIGHT:
-                if(input->right == 0) input->pressed++;
+                if(input->right == 0) input->puched++;
                 input->right = 1;
                 break;
 
             case SDLK_DOWN:
-                if(input->down == 0) input->pressed++;
+                if(input->down == 0) input->puched++;
                 input->down = 1;
                 break;
 
             case SDLK_UP:
-                if(input->up == 0) input->pressed++;
+                if(input->up == 0) input->puched++;
                 input->up = 1;
                 break;
 
@@ -123,22 +123,22 @@ void getInput(Input *input)
                 break;
 
             case SDLK_LEFT:
-                if(input->left == 1) input->pressed--;
+                if(input->left == 1) input->puched--;
                 input->left = 0;
                 break;
 
             case SDLK_RIGHT:
-                if(input->right == 1) input->pressed--;
+                if(input->right == 1) input->puched--;
                 input->right = 0;
                 break;
 
             case SDLK_DOWN:
-                if(input->down == 1) input->pressed--;
+                if(input->down == 1) input->puched--;
                 input->down = 0;
                 break;
 
             case SDLK_UP:
-                if(input->up == 1) input->pressed--;
+                if(input->up == 1) input->puched--;
                 input->up = 0;
                 break;
 
@@ -181,10 +181,10 @@ void getJoystick(Input *input)
     SDL_Event event;
 
     /*Si on ne touche pas au D-PAD, on le désactive (on teste les 4 boutons du D-PAD) */
-    if(SDL_JoystickGetButton(joystick, BOUTON_HAUT) == 0
-            && SDL_JoystickGetButton(joystick, BOUTON_BAS) == 0
-            && SDL_JoystickGetButton(joystick, BOUTON_DROITE) == 0
-            && SDL_JoystickGetButton(joystick, BOUTON_GAUCHE) == 0)
+    if(SDL_JoystickGetButton(joystick, UP_BUTTON) == 0
+            && SDL_JoystickGetButton(joystick, DOWN_BUTTON) == 0
+            && SDL_JoystickGetButton(joystick, RIGHT_BUTTON) == 0
+            && SDL_JoystickGetButton(joystick, LEFT_BUTTON) == 0)
         DPADinUse = 0;
 
     /* On passe les events en revue */
@@ -205,37 +205,37 @@ void getJoystick(Input *input)
         }
         else if(event.type == SDL_JOYBUTTONDOWN)
         {
-            if(event.jbutton.button == BOUTON_ITEM)
+            if(event.jbutton.button == ITEM_BUTTON)
                 input->useItem = 1;
 
-            else if(event.jbutton.button == BOUTON_ATTAQUE)
+            else if(event.jbutton.button == ATTACK_BUTTON)
                 input->attack = 1;
 
-            else if(event.jbutton.button == BOUTON_PAUSE)
+            else if(event.jbutton.button == START_BUTTON)
                 input->enter = 1;
 
-            else if(event.jbutton.button == BOUTON_QUIT)
+            else if(event.jbutton.button == QUIT_BUTTON)
                 exit(0);
 
-            else if(event.jbutton.button == BOUTON_HAUT)
+            else if(event.jbutton.button == UP_BUTTON)
             {
                 input->up = 1;
                 DPADinUse = 1;
             }
 
-            else if(event.jbutton.button == BOUTON_BAS)
+            else if(event.jbutton.button == DOWN_BUTTON)
             {
                 input->down = 1;
                 DPADinUse = 1;
             }
 
-            else if(event.jbutton.button == BOUTON_GAUCHE)
+            else if(event.jbutton.button == LEFT_BUTTON)
             {
                 input->left = 1;
                 DPADinUse = 1;
             }
 
-            else if(event.jbutton.button == BOUTON_DROITE)
+            else if(event.jbutton.button == RIGHT_BUTTON)
             {
                 input->right = 1;
                 DPADinUse = 1;
@@ -243,25 +243,25 @@ void getJoystick(Input *input)
         }
         else if(event.type == SDL_JOYBUTTONUP)
         {
-            if(event.jbutton.button == BOUTON_PAUSE)
+            if(event.jbutton.button == START_BUTTON)
                 input->enter = 0;
 
-            else if(event.jbutton.button == BOUTON_ATTAQUE)
+            else if(event.jbutton.button == ATTACK_BUTTON)
                 input->attack = 0;
 
-            else if(event.jbutton.button == BOUTON_ITEM)
+            else if(event.jbutton.button == ITEM_BUTTON)
                 input->useItem = 0;
 
-            else if(event.jbutton.button == BOUTON_HAUT)
+            else if(event.jbutton.button == UP_BUTTON)
                 input->up = 0;
 
-            else if(event.jbutton.button == BOUTON_BAS)
+            else if(event.jbutton.button == DOWN_BUTTON)
                 input->down = 0;
 
-            else if(event.jbutton.button == BOUTON_GAUCHE)
+            else if(event.jbutton.button == LEFT_BUTTON)
                 input->left = 0;
 
-            else if(event.jbutton.button == BOUTON_DROITE)
+            else if(event.jbutton.button == RIGHT_BUTTON)
                 input->right = 0;
         }
 
@@ -339,8 +339,8 @@ void resetInput(Input *input)
     if(input->input1 == INPUT_RIGHT && !input->right) input->input1 = NONE;
     if(input->input1 == INPUT_UP && !input->up) input->input1 = NONE;
 
-    if(input->pressed == 0 || input->pressed > 2) input->input1 = input->input2 = NONE;
-    else if(input->pressed == 1)
+    if(input->puched == 0 || input->puched > 2) input->input1 = input->input2 = NONE;
+    else if(input->puched == 1)
     {
         if(input->input2 != NONE)
         {

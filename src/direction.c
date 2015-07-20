@@ -14,39 +14,39 @@ int randomDirection(GameObject *entity)
         if(entity->timerRandDir <= 0)
         {
             srand((unsigned)time(NULL));
-            if(entity->directionAleatoire != 0)
+            if(entity->randomDir != 0)
             {
                 entity->timerRandDir = 50;
-                entity->directionAleatoire = 0;
+                entity->randomDir = 0;
                 entity->frameNumber = 0;
-                entity->etat -= 1;
+                entity->state -= 1;
                 entity->saveDirection = entity->direction;
             }
             else
             {
                 for(int i = 0 ; i < 200000 ; i++)
                 {
-                    entity->directionAleatoire = rand();
-                    entity->directionAleatoire = (int)(entity->directionAleatoire * (borneMaximale + 1 - borneMinimale)
+                    entity->randomDir = rand();
+                    entity->randomDir = (int)(entity->randomDir * (borneMaximale + 1 - borneMinimale)
                                                        / RAND_MAX + borneMinimale );
                 }
 
                 entity->timerRandDir = 100;
                 entity->frameNumber = 0;
-                entity->etat -= 1;
+                entity->state -= 1;
             }
         }
         else entity->timerRandDir--;
     }
 
-    return entity->directionAleatoire;
+    return entity->randomDir;
 
 }
 
 
 
 /* Les quatre fonctions de direction du joueur */
-void playerLeft(Input *input, GameObject *entity)
+void playerDirLeft(Input *input, GameObject *entity)
 {
     /* Le héros ne bouge pas si on appuie sur gauche et droite en même temps */
     if(input->left && !input->right && (input->input1 == INPUT_LEFT || input->input1 == NONE))
@@ -61,10 +61,10 @@ void playerLeft(Input *input, GameObject *entity)
 
         /* Si ce n'était pas son état auparavant */
 
-        if(entity->etat != WALK_HORIZONTAL && input->input1 == INPUT_LEFT)
+        if(entity->state != WALK_HORIZONTAL && input->input1 == INPUT_LEFT)
         {
             /* On enregistre l'anim' de la marche et on l'initialise à 0 */
-            entity->etat = WALK_HORIZONTAL;
+            entity->state = WALK_HORIZONTAL;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
@@ -87,7 +87,7 @@ void playerLeft(Input *input, GameObject *entity)
 
 
 
-void playerRight(Input *input, GameObject *entity)
+void playerDirRight(Input *input, GameObject *entity)
 {
     if(input->right && !input->left && (input->input1 == INPUT_RIGHT || input->input1 == NONE))
     {
@@ -101,10 +101,10 @@ void playerRight(Input *input, GameObject *entity)
         entity->direction = RIGHT;
 
         /* Si ce n'était pas son état auparavant */
-        if(entity->etat != WALK_HORIZONTAL && input->input1 == INPUT_RIGHT)
+        if(entity->state != WALK_HORIZONTAL && input->input1 == INPUT_RIGHT)
         {
             /* On enregistre l'anim' de la marche et on l'initialise à 0 */
-            entity->etat = WALK_HORIZONTAL;
+            entity->state = WALK_HORIZONTAL;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
@@ -112,13 +112,13 @@ void playerRight(Input *input, GameObject *entity)
         if(input->up && input->input1 == INPUT_RIGHT)
         {
             input->input2 = INPUT_UP;
-            if(entity->etat != ATTACK_HORIZONTAL) entity->dirY -= PLAYER_SPEED;
+            if(entity->state != ATTACK_HORIZONTAL) entity->dirY -= PLAYER_SPEED;
         }
 
         if(input->down && input->input1 == INPUT_RIGHT)
         {
             input->input2 = INPUT_DOWN;
-            if(entity->etat != ATTACK_HORIZONTAL) entity->dirY += PLAYER_SPEED;
+            if(entity->state != ATTACK_HORIZONTAL) entity->dirY += PLAYER_SPEED;
         }
     }
 
@@ -126,7 +126,7 @@ void playerRight(Input *input, GameObject *entity)
 
 
 
-void playerDown(Input *input, GameObject *entity)
+void playerDirDown(Input *input, GameObject *entity)
 {
     if(input->down && !input->up && (input->input1 == INPUT_DOWN || input->input1 == NONE))
     {
@@ -137,9 +137,9 @@ void playerDown(Input *input, GameObject *entity)
         entity->direction = DOWN;
 
 
-        if(entity->etat != WALK_DOWN && input->input1 == INPUT_DOWN)
+        if(entity->state != WALK_DOWN && input->input1 == INPUT_DOWN)
         {
-            entity->etat = WALK_DOWN;
+            entity->state = WALK_DOWN;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
@@ -160,7 +160,7 @@ void playerDown(Input *input, GameObject *entity)
 
 
 
-void playerUp(Input *input, GameObject *entity)
+void playerDirUp(Input *input, GameObject *entity)
 {
     if(input->up && !input->down && (input->input1 == INPUT_UP || input->input1 == NONE))
     {
@@ -170,9 +170,9 @@ void playerUp(Input *input, GameObject *entity)
         entity->frameMax = 9;
         entity->direction = UP;
 
-        if(entity->etat != WALK_UP && input->input1 == INPUT_UP)
+        if(entity->state != WALK_UP && input->input1 == INPUT_UP)
         {
-            entity->etat = WALK_UP;
+            entity->state = WALK_UP;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
@@ -194,12 +194,12 @@ void playerUp(Input *input, GameObject *entity)
 
 
 
-void playerDirection(Input *input, GameObject *entity)
+void playerDir(Input *input, GameObject *entity)
 {
-    playerLeft(input, entity);
-    playerDown(input, entity);
-    playerUp(input, entity);
-    playerRight(input, entity);
+    playerDirLeft(input, entity);
+    playerDirDown(input, entity);
+    playerDirUp(input, entity);
+    playerDirRight(input, entity);
 
 }
 
@@ -209,13 +209,13 @@ void playerIdleHorizontale(GameObject *entity)
 {
     /* On teste si le joueur n'était pas déjà inactif, pour ne pas recharger l'animation
     à chaque tour de boucle */
-    if(entity->etat == WALK_HORIZONTAL)
+    if(entity->state == WALK_HORIZONTAL)
     {
         entity->dirX = 0;
         entity->dirY = 0;
 
         /* On enregistre l'anim' de l'inactivité et on l'initialise à 0 */
-        entity->etat = IDLE_HORIZONTAL;
+        entity->state = IDLE_HORIZONTAL;
         entity->frameNumber = 0;
         entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         entity->frameMax = 9;
@@ -227,11 +227,11 @@ void playerIdleHorizontale(GameObject *entity)
 
 void playerIdleVerticale(GameObject *entity)
 {
-    if(entity->etat == WALK_UP || entity->etat == WALK_DOWN)
+    if(entity->state == WALK_UP || entity->state == WALK_DOWN)
     {
         entity->dirX = 0;
         entity->dirY = 0;
-        entity->etat = entity->etat == WALK_UP ? IDLE_UP : IDLE_DOWN;
+        entity->state = entity->state == WALK_UP ? IDLE_UP : IDLE_DOWN;
         entity->frameNumber = 0;
         entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         entity->frameMax = 9;
@@ -243,14 +243,14 @@ void playerIdleVerticale(GameObject *entity)
 
 void playerIdle(Input *input, GameObject *entity)
 {
-    if((!input->right && !input->left && input->pressed <= 1) || (input->left && input->right) || ((input->left || input->right) && (input->up && input->down)))
+    if((!input->right && !input->left && input->puched <= 1) || (input->left && input->right) || ((input->left || input->right) && (input->up && input->down)))
     {
         if(input->left && input->right) entity->attack = 1;
         playerIdleHorizontale(entity);
     }
 
     /* Idem qu'au-dessus mais pour l'axe Y */
-    if((!input->up && !input->down && input->pressed <= 1) || (input->up && input->down) || ((input->up || input->down) && (input->left && input->right)))
+    if((!input->up && !input->down && input->puched <= 1) || (input->up && input->down) || ((input->up || input->down) && (input->left && input->right)))
     {
         if(input->up && input->down) entity->attack = 1;
         playerIdleVerticale(entity);
@@ -280,8 +280,10 @@ void touchDirLeft(GameObject *defenseur, GameObject attaquant)
 {
 
     setEntityDirX(defenseur, PLAYER_HURT);
-    if(defenseur->y + defenseur->h / 2 <= attaquant.y + attaquant.h / 2) setEntityDirY(defenseur, -PLAYER_HURT);
-    else setEntityDirY(defenseur, PLAYER_HURT);
+    if(defenseur->y + defenseur->h / 2 <= attaquant.y + attaquant.h / 2)
+        setEntityDirY(defenseur, -PLAYER_HURT);
+    else
+        setEntityDirY(defenseur, PLAYER_HURT);
 
 }
 

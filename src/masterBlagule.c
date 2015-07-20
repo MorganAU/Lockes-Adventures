@@ -86,3 +86,11 @@ void masterBlaguleAttack(void)
     }
 
 }
+
+
+
+int getMasterBlaguleLife(void)
+{
+    return 5;
+
+}

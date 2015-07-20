@@ -9,7 +9,7 @@
 typedef struct Input
 {
     int left, right, up, down, useItem, attack, enter, erase, pause;
-    int pressed;
+    int puched;
     int input1, input2;
 
 } Input;
@@ -23,7 +23,7 @@ typedef struct Map
     SDL_Texture *tileSet, *tileSetB;
 
     /* Numéro du tileset à utiliser */
-    int tilesetAffiche;
+    int tilesetDisplay;
 
     /* Coordonnées de départ du héros, lorsqu'il commence le niveau */
     int beginx, beginy;
@@ -68,13 +68,13 @@ typedef struct GameObject
     int wAttack, hAttack;
 
     /* Checkpoint pour le héros (actif ou non) */
-    int checkpointActif;
+    int checkpointWorking;
 
     /* Coordonnées de respawn */
     int respawnX, respawnY;
 
     /* Attaque */
-    int attack, timerAttack, canSwordAttack, estEnTrainDAttaquer, touche;
+    int attack, timerAttack, canSwordAttack, isAttacking, touch;
     float power;
 
 
@@ -84,9 +84,9 @@ typedef struct GameObject
 
         /* Nombre max de frames, état du sprite et direction
         dans laquelle il se déplace */
-        int etat, direction;
-        float directionAleatoire;
-        int saveEtat, saveDirection, saveDirection2;
+        int state, direction;
+        float randomDir;
+        int saveState, saveDirection;
 
 
     /*Variables utiles pour la gestion des collisions :

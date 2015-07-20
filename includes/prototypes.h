@@ -9,7 +9,7 @@
 
 
 /* attaques.c */
-extern void gestionAttaque(Input *input, GameObject *entity);
+extern void attackManagement(Input *input, GameObject *entity);
 extern int canAttack(GameObject *entity);
 extern void drawOneHandAttack(GameObject *entity);
 
@@ -17,11 +17,11 @@ extern void drawOneHandAttack(GameObject *entity);
 
 /* direction.c */
 extern int randomDirection(GameObject *entity);
-extern void playerLeft(Input *input, GameObject *entity);
-extern void playerUp(Input *input, GameObject *entity);
-extern void playerDown(Input *input, GameObject *entity);
-extern void playerRight(Input *input, GameObject *entity);
-extern void playerDirection(Input *input, GameObject *entity);
+extern void playerDirLeft(Input *input, GameObject *entity);
+extern void playerDirUp(Input *input, GameObject *entity);
+extern void playerDirDown(Input *input, GameObject *entity);
+extern void playerDirRight(Input *input, GameObject *entity);
+extern void playerDir(Input *input, GameObject *entity);
 extern void playerIdleHorizontale(GameObject *entity);
 extern void playerIdleVerticale(GameObject *entity);
 extern void playerIdle(Input *input, GameObject *entity);
@@ -98,116 +98,80 @@ extern void monsterCollisionToMap(GameObject *entity);
 
 
 
-/* oneHand.c */
-extern void drawOnehand(void);
-extern int getOneHandX(void);
-extern int getOneHandY(void);
-
-
-
-
-
-
-
-
-extern void centerScrollingOnPlayer(void);
-extern int checkFall(GameObject monster);
+/* monster.c */
+extern GameObject *getMonster(int nombre);
+extern int getMonsterX(int nombre);
+extern int getMonsterY(int nombre);
+extern int getMonsterNumber(void);
+extern void resetMonsters(void);
+extern void initMonsterSprites(void);
 extern void cleanMonsters(void);
-extern void cleanPlayer(void);
+extern void initializeNewMonster(int x, int y, int name);
+extern void updateMonsters(void);
 extern int collide(GameObject *player, GameObject *monster);
 extern void drawMonster(GameObject *entity);
-extern void drawPlayer(void);
-extern void getJoystick(Input *input);
-extern int getLevel(void);
-extern int getLife(void);
-extern int getLifeMax(void);
-extern GameObject *getMonster(int nombre);
-extern int getNombreDetoiles(void);
-extern int getNombreDeVies(void);
-extern int getMonsterNumber(void);
+extern int getMonsterFrameTimer(int name);
+extern int getMonsterFrameMax(int name, int borned);
+extern void monsterBlitt(int name, int etat, int frameNumber, int *w, int *h, int *x, int *y, int borned);
+extern int monsterMoves(GameObject *entity, int name);
+extern int monsterWasBorned(int *frame, int name);
+extern void monsterDirection(int *etat, float *dX, float *dY, int direction);
+extern void initStatsMonsters(int *borned, int *frame, float *directionAleatoire);
+extern int monsterLife(int name);
+
+
+
+/* oneHand.c */
+extern void drawOnehand(void);
+extern void getOneHandDest(int *x, int *y);
+extern void getOneHandDestRight(int *x, int *y);
+extern void getOneHandDestLeft(int *x, int *y);
+extern void getOneHandDestUp(int *x, int *y);
+extern void getOneHandDestDown(int *x, int *y);
+extern int oneHandHurt(int mX, int mY, int mW, int mH);
+
+
+
+/* player.c */
 extern GameObject *getPlayer(void);
-extern int getPlayerDirection(void);
+extern int getAttack(void);
+extern SDL_Texture *getSprite(void);
 extern int getPlayerx(void);
 extern int getPlayery(void);
-extern int getTileValue(int y, int x);
-extern void initializePlayer(int newLevel);
-extern void initializeNewMonster(int x, int y, int name);
-extern void initMonsterSprites(void);
-extern void initPlayerSprites(void);
-extern void killPlayer(void);
-extern void mapCollision(GameObject *entity);
-extern void playerHurts(GameObject monster);
-extern void resetMonsters(void);
-extern void setNombreDeVies(int valeur);
-extern void setNombreDetoiles(int valeur);
-extern void setValeurDuNiveau(int valeur);
-extern void updatePlayer(Input *input);
-extern void updateMonsters(void);
-extern SDL_Texture *getSprite(void);
-
-
-/* Nouvelles fonctions, je dois faire le tri :D */
 extern int getPlayerFrameNumber(void);
 extern int getPlayerDirection(void);
-extern int oneHandHurt(int mX, int mY, int mW, int mH);
-extern int getAttack(void);
-
-
-
 extern void setPlayerDirX(float valeur);
 extern void setPlayerDirY(float valeur);
-extern void entityTouch(void);
-extern int getEtat(int nombre);
-extern int getWidthBlaguleSprite(int etat, int frameNumber);
-extern int getHeightBlaguleSprite(int etat, int frameNumber);
-
-extern int getMonsterWidth(int frame, int statut);
-extern int getMonsterHeight(int frame, int statut);
-extern int getMonsterSourceSpriteX(int frame, int statut);
-extern int getMonsterSourceSpriteY(int frame, int statut);
-
+extern int getLevel(void);
+extern void setLevelNumber(int valeur);
+extern int getLifeNumber(void);
+extern void setLifeNumber(int valeur);
+extern int getStarNumber(void);
+extern int getTouch(void);
+extern void setStarNumber(int valeur);
+extern void initPlayerSprites(void);
+extern void cleanPlayer(void);
+extern int getLife(void);
+extern int getLifeMax(void);
+extern void killPlayer(void);
+extern void playerHurts(GameObject monster);
 extern int getHurts(void);
+extern void initializePlayer(int newLevel);
+extern void drawPlayer(void);
+extern void updatePlayer(Input *input);
+extern void centerScrollingOnPlayer(void);
+extern void walkFrameTimer(void);
+extern void attackFrameTimer(void);
+extern void entityTouch(void);
 
 
 
+/* sounds.c */
 extern void loadSong(char filename[200]);
 extern void cleanUpMusic(void);
 extern void loadSound(void);
 extern void freeSound(void);
 extern void playSoundFx(int type);
-
-
-
-
-
-extern int getMonsterFrameTimer(int name);
-extern int getMonsterFrameMax(int name, int borned);
-extern void monsterBlitt(int name, int etat, int frameNumber, int *w, int *h, int *x, int *y, int borned);
-extern int getMonsterX(int nombre);
-extern int getMonsterY(int nombre);
-
-
-
-
-extern int monsterMoves(GameObject *entity, int name);
-extern int blaguleRandomMoves(GameObject *entity);
-
-
-
-
-
-extern int monsterWasBorned(int *frame, int name);
-extern void monsterDirection(int *etat, float *dX, float *dY, int direction);
-
-
-
-extern void initialiseStatsMonsters(int *borned, int *frame, float *directionAleatoire);
-
-
-
-
-extern void walkFrameTimer(void);
-extern void attackFrameTimer(void);
 
 
 
@@ -233,6 +197,7 @@ extern void masterBlaguleBlitt(int frameNumber, int *w, int *h, int *x, int *y);
 extern int getMasterBlaguleFrameTimer(void);
 extern int getMasterBlaguleFrameMax(void);
 extern void masterBlaguleAttack(void);
+extern int getMasterBlaguleLife(void);
 
 
 

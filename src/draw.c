@@ -224,7 +224,7 @@ void drawLifeMax(void)
 void drawCoinPlayer(void)
 {
     char text[200];
-
+GameObject *player = getPlayer();
 
     /* Affiche le nombre de vies en bas à droite - Adaptation à la fenêtre auto */
     drawTile(getTileSetA(), SCREEN_WIDTH - 120, SCREEN_HEIGHT - 60, 18 % 10 * TILE_SIZE, 12 /10 * TILE_SIZE);
@@ -234,11 +234,11 @@ void drawCoinPlayer(void)
 
     drawString(text, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 54, 0, 0, 0, 255);
 
-    sprintf(text, "pressed =");
-    drawString(text, 10, SCREEN_HEIGHT - 70, 255, 0, 0, 255);/*
-        sprintf(text, "input1 = %d", input->input1);
+    sprintf(text, "%d", getLife());
+    drawString(text, 10, SCREEN_HEIGHT - 70, 255, 0, 0, 255);
+        sprintf(text, "timer = %d", player->life);
     drawString(text, 10, SCREEN_HEIGHT - 55, 255, 0, 0, 255);
-    sprintf(text, "input2 = %d", input->input2);
+   /* sprintf(text, "input2 = %d", input->input2);
     drawString(text, 10, SCREEN_HEIGHT - 40, 255, 0, 0, 255);*/
 
 }

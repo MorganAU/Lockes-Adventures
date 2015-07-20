@@ -100,18 +100,18 @@
 #define DEAD_ZONE 8000
 
 /* Mapping de la manette */
-#define BOUTON_HAUT 13
-#define BOUTON_DROITE 14
-#define BOUTON_BAS 15
-#define BOUTON_GAUCHE 16
+#define UP_BUTTON 13
+#define RIGHT_BUTTON 14
+#define DOWN_BUTTON 15
+#define LEFT_BUTTON 16
 
-#define BOUTON_ITEM 4
-#define BOUTON_ATTAQUE 2
-#define BOUTON_PAUSE 10
-#define BOUTON_QUIT 9
+#define ITEM_BUTTON 4
+#define ATTACK_BUTTON 2
+#define START_BUTTON 10
+#define QUIT_BUTTON 9
 
 /* Nombre max de monstres à l'écran */
-#define MONSTRES_MAX 50
+#define MONSTERS_MAX 50
 
 /* Dimensions du monstre */
 #define MONSTER_WIDTH 32
