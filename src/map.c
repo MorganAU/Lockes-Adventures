@@ -199,8 +199,8 @@ void drawMap(int layer)
                 /* Si la tile à dessiner n'est pas une tile vide */
                 if(map.tile[mapY][mapX] != 0)
                 {
-                    /* On teste si c'est une tile monstre (tile numéro 10) */
-                    if(map.tile[mapY][mapX] == TILE_MONSTER || map.tile[mapY][mapX] == TILE_MONSTER2)
+                    /* On teste si c'est une tile monstre (tile numéro 12) */
+                    if(map.tile[mapY][mapX] >= TILE_MONSTER)
                     {
                         /* On initialise un monstre en envoyant les
                         coordonnées de la tile */
@@ -223,8 +223,10 @@ void drawMap(int layer)
                 xsource = a % 10 * TILE_SIZE;
 
                 /* Fonction qui blitte la bonne tile au bon endroit suivant le timer */
-                if(map.tileSetNumber == 0) drawTile(map.tileSet, x, y, xsource, ysource);
-                else drawTile(map.tileSetB, x, y, xsource, ysource);
+                if(map.tileSetNumber == 0)
+                    drawTile(map.tileSet, x, y, xsource, ysource);
+                else
+                    drawTile(map.tileSetB, x, y, xsource, ysource);
 
                 mapX++;
             }
@@ -241,21 +243,6 @@ void drawMap(int layer)
 
             for(x = x1 ; x < x2 ; x += TILE_SIZE)
             {
-                /* Si la tile à dessiner n'est pas une tile vide */
-                if(map.tile2[mapY][mapX] != 0)
-                {
-                    /* On teste si c'est une tile monstre (tile numéro 10) */
-                    if(map.tile2[mapY][mapX] == TILE_MONSTER || map.tile2[mapY][mapX] == TILE_MONSTER2)
-                    {
-                        /* On initialise un monstre en envoyant les
-                        coordonnées de la tile */
-                        initializeNewMonster(mapX * TILE_SIZE, mapY * TILE_SIZE, map.tile[mapY][mapX]);
-
-                        /* Et on efface cette tile de notre tableau pour éviter un spawn de monstres infini */
-                        map.tile2[mapY][mapX] = 0;
-                    }
-                }
-
                 /* Suivant le numéro de notre tile, on découpe le tileset (a = le numéro
                 de la tile */
                 a = map.tile2[mapY][mapX];
@@ -286,21 +273,6 @@ void drawMap(int layer)
 
             for(x = x1 ; x < x2 ; x += TILE_SIZE)
             {
-                /* Si la tile à dessiner n'est pas une tile vide */
-                if(map.tile3[mapY][mapX] != 0)
-                {
-                    /* On teste si c'est une tile monstre (tile numéro 10) */
-                    if(map.tile3[mapY][mapX] == TILE_MONSTER || map.tile3[mapY][mapX] == TILE_MONSTER2)
-                    {
-                        /* On initialise un monstre en envoyant les
-                        coordonnées de la tile */
-                        initializeNewMonster(mapX * TILE_SIZE, mapY * TILE_SIZE, map.tile[mapY][mapX]);
-
-                        /* Et on efface cette tile de notre tableau pour éviter un spawn de monstres infini */
-                        map.tile3[mapY][mapX] = 0;
-                    }
-                }
-
                 /* Suivant le numéro de notre tile, on découpe le tileset (a = le numéro
                 de la tile */
                 a = map.tile3[mapY][mapX];

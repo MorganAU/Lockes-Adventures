@@ -2,7 +2,7 @@
 
 
 /* HUD */
-SDL_Texture *HUD_vie, *HUD_etoiles;
+SDL_Texture *tilesetHUD, *HUD_etoiles;
 int one;
 
 
@@ -17,12 +17,13 @@ void drawGame(void)
     /* Affiche la map de tiles : layer 1 (couche active : sol, etc.)*/
     drawMap(1);
 
-     /* Affiche le joueur et son attaque */
+    /* Affiche le joueur et son attaque */
     drawPlayer();
     drawOnehand();
 
     /* Affiche les monstres */
-    for(int i  = 0 ; i < getMonsterNumber() ; i++) drawMonster(getMonster(i));
+    for(int i  = 0 ; i < getMonsterNumber() ; i++)
+        drawMonster(getMonster(i));
 
     /* Affiche la map de tiles : layer 3 (couche en foreground / devant) */
     drawMap(3);
@@ -121,7 +122,7 @@ void drawTile(SDL_Texture *image, int destx, int desty, int srcx, int srcy)
 void initHUD(void)
 {
     /* On charge les images du HUD */
-    HUD_vie = loadImage("ressources/graphics/life.png");
+    tilesetHUD = loadImage("ressources/graphics/tileset_hud.png");
     HUD_etoiles = loadImage("ressources/graphics/stars.png");
 
 }
@@ -131,7 +132,7 @@ void initHUD(void)
 void cleanHUD(void)
 {
     if(HUD_etoiles != NULL) SDL_DestroyTexture(HUD_etoiles);
-    if(HUD_vie != NULL) SDL_DestroyTexture(HUD_vie);
+    if(tilesetHUD != NULL) SDL_DestroyTexture(tilesetHUD);
 
 }
 
@@ -141,7 +142,7 @@ void drawHUD(void)
 {
     /* On crée une variable qui contiendra notre texte (moins de 200 caractères) */
 
-    drawLife();
+    drawLifePlayer();
     drawCoinPlayer();
 
 
@@ -161,61 +162,23 @@ void drawHUD(void)
 
 
 
-void drawLife(void)
+void drawLifePlayer(void)
 {
-    int boucle = getLife() / 4;
-    int reste = getLife() % 4;
-
-    drawLifeMax();
-
     /* Affiche le nombre de coeurs, on crée une boucle pour afficher de 1 à 3 cœurs selon la vie, avec un décalage de 32 px */
-    for(int i = 0 ; i <= getLife() / 4 ; i++)
-    {
-        int ysource = 12 / 10 * TILE_SIZE;
-        int xsource;
-        int ydest, xdest;
+    int ysource = 0;
+    int xsource = 0;
+    int ydest = 20;
+    int xdest = 30;
+    float ratioMax = (float)getLifeMax() * 100 / 58;
+    float ratio = getLife() / ratioMax * 100;
+    float coeff = 2;
 
-        if(i < 10) ydest = 20;
-        else ydest = 35;
+    if(ratio > 58) ratio = 58;
 
-        if(i < 10) xdest = 30 + i * 16;
-        else xdest = 30 + (i - 10) * 16;
+    drawTileHUD(tilesetHUD, xdest, ydest, xsource, ysource, 64, 10, coeff);
 
-        if(boucle > 0)
-        {
-            boucle--;
-            xsource = 13 % 10 * TILE_SIZE;
-
-            /* Calcul pour découper le tileset comme dans la fonction drawMap() */
-            drawTile(getTileSetA(), xdest, ydest, xsource, ysource);
-        }
-        else if(reste != 0)
-        {
-            xsource = (13 + reste) % 10 * TILE_SIZE;
-            drawTile(getTileSetA(), xdest, ydest, xsource, ysource);
-        }
-    }
-
-}
-
-
-
-void drawLifeMax(void)
-{
-    for(int i = 0 ; i < getLifeMax() / 4 ; i++)
-    {
-        int ysource = 12 /10 * TILE_SIZE;
-        int xsource = 17 % 10 * TILE_SIZE;
-        int ydest, xdest;
-
-        if(i < 10) ydest = 20;
-        else ydest = 35;
-
-        if(i < 10) xdest = 30 + i * 16;
-        else xdest = 30 + (i - 10) * 16;
-
-        drawTile(getTileSetA(), xdest, ydest, xsource, ysource);
-    }
+    for(int i = 0 ; i < ratio ; i++)
+        drawTileHUD(tilesetHUD, xdest + 3 * coeff + i * coeff, ydest + 3 * coeff, 3, 3, 1, 3, coeff);
 
 }
 
@@ -224,21 +187,47 @@ void drawLifeMax(void)
 void drawCoinPlayer(void)
 {
     char text[200];
-GameObject *player = getPlayer();
+    GameObject *player = getPlayer();
 
     /* Affiche le nombre de vies en bas à droite - Adaptation à la fenêtre auto */
-    drawTile(getTileSetA(), SCREEN_WIDTH - 120, SCREEN_HEIGHT - 60, 18 % 10 * TILE_SIZE, 12 /10 * TILE_SIZE);
+    drawTileHUD(tilesetHUD, SCREEN_WIDTH - 115, SCREEN_HEIGHT - 55, 64, 0, 10, 10, 2);
 
     /* Pour afficher le nombre de vies, on formate notre string pour qu'il la valeur de la variable */
     sprintf(text, " %d", 1000);
 
     drawString(text, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 54, 0, 0, 0, 255);
 
-    sprintf(text, "%d", getLife());
+    /* Lignes suivantes permettent d'afficher diverses informations en fonction du besoin sans utiliser fprintf() */
+    /*sprintf(text, "%d", getLife());
     drawString(text, 10, SCREEN_HEIGHT - 70, 255, 0, 0, 255);
-        sprintf(text, "timer = %d", player->life);
+    sprintf(text, "timer = %d", player->life);
     drawString(text, 10, SCREEN_HEIGHT - 55, 255, 0, 0, 255);
-   /* sprintf(text, "input2 = %d", input->input2);
+    sprintf(text, "input2 = %d", input->input2);
     drawString(text, 10, SCREEN_HEIGHT - 40, 255, 0, 0, 255);*/
+
+}
+
+
+
+void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeff)
+{
+    /* Rectangle de destination à dessiner */
+    SDL_Rect dest;
+
+    dest.x = destx;
+    dest.y = desty;
+    dest.w = w * coeff;
+    dest.h = h * coeff;
+
+    /* Rectangle source */
+    SDL_Rect src;
+
+    src.x = srcx;
+    src.y = srcy;
+    src.w = w;
+    src.h = h;
+
+    /* Dessine la tile choisie sur l'écran aux coordonnées x et y */
+    SDL_RenderCopy(getRenderer(), image, &src, &dest);
 
 }

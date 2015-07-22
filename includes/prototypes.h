@@ -44,9 +44,9 @@ extern void drawTile(SDL_Texture *image, int destx, int desty, int srcx, int src
 extern void initHUD(void);
 extern void cleanHUD(void);
 extern void drawHUD(void);
-extern void drawLife(void);
-extern void drawLifeMax(void);
+extern void drawLifePlayer(void);
 extern void drawCoinPlayer(void);
+extern void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeff);
 
 
 

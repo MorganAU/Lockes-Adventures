@@ -221,8 +221,8 @@ void initializePlayer(int newLevel)
 {
     /* PV à 3 */
 
-    player.lifeMax = 12;
-    player.life = 12;
+    player.lifeMax = 100;
+    player.life = 100;
 
     /* Timer d'invincibilité */
     player.invincibleTimer = 0;

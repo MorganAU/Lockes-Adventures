@@ -82,12 +82,12 @@
 #define BLANK_TILE 7
 
 /* Tiles des monstres */
-#define TILE_MONSTER 19
-#define TILE_MONSTER2 12
+#define TILE_MONSTER 12
+#define TILE_MONSTER2 13
 
 /* Monstres */
 #define BLAGULE 12
-#define MASTER_BLAGULE 19
+#define MASTER_BLAGULE 13
 
 /* Constantes pour la gestion des doubles directions */
 #define INPUT_LEFT 1
