@@ -45,8 +45,9 @@ extern void initHUD(void);
 extern void cleanHUD(void);
 extern void drawHUD(void);
 extern void drawLifePlayer(void);
+extern void drawLifeMonster(GameObject *entity);
 extern void drawCoinPlayer(void);
-extern void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeff);
+extern void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeffW, float coeffH);
 
 
 
@@ -118,6 +119,7 @@ extern int monsterWasBorned(int *frame, int name);
 extern void monsterDirection(int *etat, float *dX, float *dY, int direction);
 extern void initStatsMonsters(int *borned, int *frame, float *directionAleatoire);
 extern int monsterLife(int name);
+extern int monsterWForLife(int name);
 
 
 

@@ -91,6 +91,7 @@ void initializeNewMonster(int x, int y, int name)
         par la fonction drawMap() en arguments */
         monster[nombreMonstres].x = x;
         monster[nombreMonstres].y = y;
+        monster[nombreMonstres].timerRandDir = 0;
 
         /* On initialise ses stats (l'animation d'apparition, la numéro de la frame et sa direction) */
         initStatsMonsters(&monster[nombreMonstres].borned, &monster[nombreMonstres].frameNumber, &monster[nombreMonstres].randomDir);
@@ -361,3 +362,34 @@ int monsterLife(int name)
         return 0;
 
 }
+
+
+
+int monsterWForLife(int name)
+{
+    if(name == BLAGULE)
+        return 32;
+    else if(name == MASTER_BLAGULE)
+        return 138;
+    else
+        return 0;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

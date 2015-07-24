@@ -3,7 +3,6 @@
 
 /* HUD */
 SDL_Texture *tilesetHUD, *HUD_etoiles;
-int one;
 
 
 void drawGame(void)
@@ -145,6 +144,9 @@ void drawHUD(void)
     drawLifePlayer();
     drawCoinPlayer();
 
+    for(int i = 0 ; i < getMonsterNumber() ; i++)
+        drawLifeMonster(getMonster(i));
+
 
 
     /* Puis on utilise notre fonction créée précédemment pour écrire en noir (0, 0, 0, 255)
@@ -165,20 +167,43 @@ void drawHUD(void)
 void drawLifePlayer(void)
 {
     /* Affiche le nombre de coeurs, on crée une boucle pour afficher de 1 à 3 cœurs selon la vie, avec un décalage de 32 px */
-    int ysource = 0;
     int xsource = 0;
+    int ysource = 0;
     int ydest = 20;
     int xdest = 30;
-    float ratioMax = (float)getLifeMax() * 100 / 58;
-    float ratio = getLife() / ratioMax * 100;
-    float coeff = 2;
+    float ratioMax = (float)getLifeMax() * 100 / 58; //Permet de trouver la taille de la barre de vie quand les PV sont pleins
+    float ratio = (float)getLife() / ratioMax * 100; //Permet de trouver la taille en pixel d'un PV
+    float coeff = 2; //Coefficient multiplicateur permettant d'ajuster la taille de l'image
 
+    /* Permet d'éviter que la vie soit trop grande par rapport à la barre */
     if(ratio > 58) ratio = 58;
 
-    drawTileHUD(tilesetHUD, xdest, ydest, xsource, ysource, 64, 10, coeff);
+    /* Dessine la barre */
+    drawTileHUD(tilesetHUD, xdest, ydest, xsource, ysource, 64, 10, coeff, coeff);
 
+    /* Boucle dessinant la vie en fonction du nombre de PV restant */
     for(int i = 0 ; i < ratio ; i++)
-        drawTileHUD(tilesetHUD, xdest + 3 * coeff + i * coeff, ydest + 3 * coeff, 3, 3, 1, 3, coeff);
+        drawTileHUD(tilesetHUD, xdest + 3 * coeff + i * coeff, ydest + 3 * coeff, 3, 3, 1, 3, coeff, coeff);
+
+}
+
+
+
+void drawLifeMonster(GameObject *entity)
+{
+    int ysource = 0;
+    int xsource = 0;
+    int ydest = entity->y - 10 - getStartY();
+    int xdest = entity->x - getStartX();
+    float coeff = (float)monsterWForLife(entity->name) / 64;
+    float ratioMax = (float)monsterLife(entity->name) / 58;
+    float ratio = (float)entity->life * coeff / ratioMax;
+    int ajuste = coeff < 1 ? 1 : 0;
+
+    drawTileHUD(tilesetHUD, xdest, ydest, xsource, ysource, 64, 10, coeff, 1);
+
+    for(float i = 0 ; i < ratio; i++)
+        drawTileHUD(tilesetHUD, xdest + ajuste + 3 * coeff + i, ydest + 3, xsource + 3, ysource + 3, 1, 3, 1, 1);
 
 }
 
@@ -187,10 +212,9 @@ void drawLifePlayer(void)
 void drawCoinPlayer(void)
 {
     char text[200];
-    GameObject *player = getPlayer();
 
     /* Affiche le nombre de vies en bas à droite - Adaptation à la fenêtre auto */
-    drawTileHUD(tilesetHUD, SCREEN_WIDTH - 115, SCREEN_HEIGHT - 55, 64, 0, 10, 10, 2);
+    drawTileHUD(tilesetHUD, SCREEN_WIDTH - 115, SCREEN_HEIGHT - 55, 64, 0, 10, 10, 2, 2);
 
     /* Pour afficher le nombre de vies, on formate notre string pour qu'il la valeur de la variable */
     sprintf(text, " %d", 1000);
@@ -209,15 +233,15 @@ void drawCoinPlayer(void)
 
 
 
-void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeff)
+void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeffW, float coeffH)
 {
     /* Rectangle de destination à dessiner */
     SDL_Rect dest;
 
     dest.x = destx;
     dest.y = desty;
-    dest.w = w * coeff;
-    dest.h = h * coeff;
+    dest.w = w * coeffW;
+    dest.h = h * coeffH;
 
     /* Rectangle source */
     SDL_Rect src;
