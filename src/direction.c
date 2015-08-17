@@ -3,8 +3,8 @@
 /* Direction aléatoire du monstre */
 int randomDirection(GameObject *entity)
 {
-    float borneMinimale = 1; /* Le résultat doit être entre 1 et 4 inclut */
-    float borneMaximale = 4;
+    float lowerBound = 1; /* Le résultat doit être entre 1 et 4 inclut */
+    float upperBound = 4;
 
     /*Le monstre alterne entre un déplacement aléatoire de 100 ms et
     un moment d'inactivité de 50 ms */
@@ -27,8 +27,8 @@ int randomDirection(GameObject *entity)
                 for(int i = 0 ; i < 200000 ; i++)
                 {
                     entity->randomDir = rand();
-                    entity->randomDir = (int)(entity->randomDir * (borneMaximale + 1 - borneMinimale)
-                                                       / RAND_MAX + borneMinimale );
+                    entity->randomDir = (int)(entity->randomDir * (upperBound + 1 - lowerBound)
+                                                       / RAND_MAX + lowerBound );
                 }
 
                 entity->timerRandDir = 100;
@@ -60,8 +60,7 @@ void playerDirLeft(Input *input, GameObject *entity)
         entity->direction = LEFT;
 
         /* Si ce n'était pas son état auparavant */
-
-        if(entity->state != WALK_HORIZONTAL && input->input1 == INPUT_LEFT)
+        if(entity->state != WALK_HORIZONTAL)
         {
             /* On enregistre l'anim' de la marche et on l'initialise à 0 */
             entity->state = WALK_HORIZONTAL;
@@ -69,14 +68,14 @@ void playerDirLeft(Input *input, GameObject *entity)
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
 
-        /* pour mes belles diagonales :D */
-        if(input->up && input->input1 == INPUT_LEFT)
+        /* pour mes belles diagonales */
+        if(input->up)
         {
             input->input2 = INPUT_UP;
             entity->dirY -= PLAYER_SPEED;
         }
 
-        if(input->down && input->input1 == INPUT_LEFT)
+        if(input->down)
         {
             input->input2 = INPUT_DOWN;
             entity->dirY += PLAYER_SPEED;
@@ -101,7 +100,7 @@ void playerDirRight(Input *input, GameObject *entity)
         entity->direction = RIGHT;
 
         /* Si ce n'était pas son état auparavant */
-        if(entity->state != WALK_HORIZONTAL && input->input1 == INPUT_RIGHT)
+        if(entity->state != WALK_HORIZONTAL)
         {
             /* On enregistre l'anim' de la marche et on l'initialise à 0 */
             entity->state = WALK_HORIZONTAL;
@@ -109,16 +108,16 @@ void playerDirRight(Input *input, GameObject *entity)
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
 
-        if(input->up && input->input1 == INPUT_RIGHT)
+        if(input->up)
         {
             input->input2 = INPUT_UP;
-            if(entity->state != ATTACK_HORIZONTAL) entity->dirY -= PLAYER_SPEED;
+            entity->dirY -= PLAYER_SPEED;
         }
 
-        if(input->down && input->input1 == INPUT_RIGHT)
+        if(input->down)
         {
             input->input2 = INPUT_DOWN;
-            if(entity->state != ATTACK_HORIZONTAL) entity->dirY += PLAYER_SPEED;
+            entity->dirY += PLAYER_SPEED;
         }
     }
 
@@ -137,19 +136,19 @@ void playerDirDown(Input *input, GameObject *entity)
         entity->direction = DOWN;
 
 
-        if(entity->state != WALK_DOWN && input->input1 == INPUT_DOWN)
+        if(entity->state != WALK_DOWN)
         {
             entity->state = WALK_DOWN;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
-        if(input->left && input->input1 == INPUT_DOWN)
+        if(input->left)
         {
             input->input2 = INPUT_LEFT;
             entity->dirX -= PLAYER_SPEED;
         }
 
-        if(input->right && input->input1 == INPUT_DOWN)
+        if(input->right)
         {
             input->input2 = INPUT_RIGHT;
             entity->dirX += PLAYER_SPEED;
@@ -170,20 +169,20 @@ void playerDirUp(Input *input, GameObject *entity)
         entity->frameMax = 9;
         entity->direction = UP;
 
-        if(entity->state != WALK_UP && input->input1 == INPUT_UP)
+        if(entity->state != WALK_UP)
         {
             entity->state = WALK_UP;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
         }
 
-        if(input->left && input->input1 == INPUT_UP)
+        if(input->left)
         {
             input->input2 = INPUT_LEFT;
             entity->dirX -= PLAYER_SPEED;
         }
 
-        if(input->right && input->input1 == INPUT_UP)
+        if(input->right)
         {
             input->input2 = INPUT_RIGHT;
             entity->dirX += PLAYER_SPEED;
@@ -245,14 +244,12 @@ void playerIdle(Input *input, GameObject *entity)
 {
     if((!input->right && !input->left && input->puched <= 1) || (input->left && input->right) || ((input->left || input->right) && (input->up && input->down)))
     {
-        if(input->left && input->right) entity->attack = 1;
         playerIdleHorizontale(entity);
     }
 
     /* Idem qu'au-dessus mais pour l'axe Y */
     if((!input->up && !input->down && input->puched <= 1) || (input->up && input->down) || ((input->up || input->down) && (input->left && input->right)))
     {
-        if(input->up && input->down) entity->attack = 1;
         playerIdleVerticale(entity);
     }
 
