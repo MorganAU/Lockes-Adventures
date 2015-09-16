@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.0)
+
+project(Lockes-Adventures)
+
+INCLUDE(CMakeBackwardCompatibilityCXX)
+
+
+INCLUDE(FindPkgConfig)
+
+INCLUDE(CheckLibraryExists)
+
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
+
+
+if (UNIX)
+  if (CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -ansi -pedantic")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3")
+  endif()
+endif()
+
+INCLUDE_DIRECTORIES(includes ${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS})
+
+
+file(
+  GLOB_RECURSE
+  source_files
+  src/*.c
+  )
+
+add_executable(
+  Lockes-Adventures
+  ${source_files}
+)
+
+TARGET_LINK_LIBRARIES(Lockes-Adventures ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES} ${SDL2MIXER_LIBRARIES})
