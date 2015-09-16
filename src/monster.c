@@ -5,7 +5,7 @@ GameObject monster[MONSTERS_MAX];
 SDL_Texture *monsterSprite;
 
 
-/* Retourne un monstre donné */
+/* Retourne un monstre donnÃ© */
 GameObject *getMonster(int nombre)
 {
     return &monster[nombre];
@@ -14,7 +14,7 @@ GameObject *getMonster(int nombre)
 
 
 
-/* Retourne la coordonnée x d'un monstre donné */
+/* Retourne la coordonnÃ©e x d'un monstre donnÃ© */
 int getMonsterX(int nombre)
 {
     return monster[nombre].x;
@@ -23,7 +23,7 @@ int getMonsterX(int nombre)
 
 
 
-/* Retourne la coordonnée y d'un monstre donné */
+/* Retourne la coordonnÃ©e y d'un monstre donnÃ© */
 int getMonsterY(int nombre)
 {
     return monster[nombre].y;
@@ -42,7 +42,7 @@ int getMonsterNumber(void)
 
 
 
-/* Réinitialise le nombre de monstres à zéro */
+/* RÃ©initialise le nombre de monstres Ã  zÃ©ro */
 void resetMonsters(void)
 {
     nombreMonstres = 0;
@@ -62,7 +62,7 @@ void initMonsterSprites(void)
 
 
 
-/* Libère le sprite des monstres */
+/* LibÃ¨re le sprite des monstres */
 void cleanMonsters(void)
 {
     if(monsterSprite != NULL)
@@ -78,27 +78,27 @@ void cleanMonsters(void)
 /* Initialise un nouveau monstre */
 void initializeNewMonster(int x, int y, int name)
 {
-    /* Si on n'est pas rendu au max, on rajoute un monstre dont le numéro
-    est égal à nombreMonstres : monster[0] si c'est le 1er, monster[1],
-     si c'est le 2ème, etc... */
+    /* Si on n'est pas rendu au max, on rajoute un monstre dont le numÃ©ro
+    est Ã©gal Ã  nombreMonstres : monster[0] si c'est le 1er, monster[1],
+     si c'est le 2Ã¨me, etc... */
 
     if(nombreMonstres < MONSTERS_MAX)
     {
         /* On donne au monstre le nom de la MONSTER_TILE*/
         monster[nombreMonstres].name = name;
 
-        /* Ses coordonnées de démarrage seront envoyées
+        /* Ses coordonnÃ©es de dÃ©marrage seront envoyÃ©es
         par la fonction drawMap() en arguments */
         monster[nombreMonstres].x = x;
         monster[nombreMonstres].y = y;
         monster[nombreMonstres].timerRandDir = 0;
 
-        /* On initialise ses stats (l'animation d'apparition, la numéro de la frame et sa direction) */
+        /* On initialise ses stats (l'animation d'apparition, la numÃ©ro de la frame et sa direction) */
         initStatsMonsters(&monster[nombreMonstres].borned, &monster[nombreMonstres].frameNumber, &monster[nombreMonstres].randomDir);
         monster[nombreMonstres].life = monsterLife(monster[nombreMonstres].name);
 
-        /* Variables nécessaires au fonctionnement
-        de la gestion des collisions comme pour le héros */
+        /* Variables nÃ©cessaires au fonctionnement
+        de la gestion des collisions comme pour le hÃ©ros */
         monster[nombreMonstres].timerMort = 0;
 
         nombreMonstres++;
@@ -114,27 +114,27 @@ void updateMonsters(void)
     /* On passe en boucle tous les monstres du tableau */
     for(int i = 0 ; i < nombreMonstres ; i++)
     {
-        /* Si le timer vaut 0 alors le monstre est vivant donc on peut le gérer */
+        /* Si le timer vaut 0 alors le monstre est vivant donc on peut le gÃ©rer */
         if(monster[i].timerMort == 0)
         {
-            /* On réinitialise les vecteurs de déplacement, pour éviter que le GameObject
+            /* On rÃ©initialise les vecteurs de dÃ©placement, pour Ã©viter que le GameObject
             ne fonce de plus en plus */
             monster[i].dirX = 0;
             monster[i].dirY = 0;
 
-            /* Si l'animation est terminée alors le monstre est apparu */
+            /* Si l'animation est terminÃ©e alors le monstre est apparu */
             if(monsterWasBorned(&monster[i].frameNumber, monster[i].name)) monster[i].borned = 1;
 
-            /* Direction virtuellement aléatoire */
+            /* Direction virtuellement alÃ©atoire */
             monster[i].direction = monsterMoves(&monster[i], monster[i].name);
 
-            /* Déplacement du monstre selon la direction */
+            /* DÃ©placement du monstre selon la direction */
             monsterDirection(&monster[i].state, &monster[i].dirX, &monster[i].dirY, monster[i].direction);
 
-            /* On détecte les collisions avec la map */
+            /* On dÃ©tecte les collisions avec la map */
             monsterCollisionToMap(&monster[i]);
 
-            /* Si l'épée touche le monstre et que le joueur est en train d'attaquer, il y a collision. */
+            /* Si l'Ã©pÃ©e touche le monstre et que le joueur est en train d'attaquer, il y a collision. */
             if(oneHandHurt(monster[i].x, monster[i].y, monster[i].w, monster[i].h) && getAttack())
             {
                 if(monster[i].life > 1)
@@ -146,7 +146,7 @@ void updateMonsters(void)
                 }
             }
 
-            /* On détecte les collisions avec le joueur. Si c'est égal à 1,
+            /* On dÃ©tecte les collisions avec le joueur. Si c'est Ã©gal Ã  1,
             on diminue ses PV */
             if(collide(getPlayer(), &monster[i]))
             {
@@ -159,7 +159,7 @@ void updateMonsters(void)
                 {
                     killPlayer();
                     initStatsMonsters(&monster[i].borned, &monster[i].frameNumber, &monster[i].randomDir);
-                    /********* Compteur de masterBlagule à réinitialiser quand le joueur meurt ********/
+                    /********* Compteur de masterBlagule Ã  rÃ©initialiser quand le joueur meurt ********/
                 }
                 if(monster[i].state != IDLE) monster[i].timerRandDir = 0;
 
@@ -174,7 +174,7 @@ void updateMonsters(void)
             monster[i].timerMort--;
 
             /* Et on le remplace simplement par le dernier du tableau puis
-            on rétrécit le tableau d'une case (on ne peut pas laisser de case
+            on rÃ©trÃ©cit le tableau d'une case (on ne peut pas laisser de case
             vide) */
             if(monster[i].timerMort == 0)
             {
@@ -207,33 +207,33 @@ void drawMonster(GameObject *entity)
 {
     /* Gestion du timer */
 
-    /* Si notre timer arrive à zéro */
+    /* Si notre timer arrive Ã  zÃ©ro */
     if(entity->frameTimer <= 0)
     {
-        /* On le réinitialise */
+        /* On le rÃ©initialise */
         entity->frameTimer = getMonsterFrameTimer(entity->name);
 
-        /* Et on incrémente notre variable qui compte les frames de 1
-        pour passer à la suivante */
+        /* Et on incrÃ©mente notre variable qui compte les frames de 1
+        pour passer Ã  la suivante */
         entity->frameNumber++;
 
-        /* Mais si on dépasse la frame max, il faut revenir à la première,
-        sauf si c'est une animation unique (qui ne s'exécute qu'une seule fois
+        /* Mais si on dÃ©passe la frame max, il faut revenir Ã  la premiÃ¨re,
+        sauf si c'est une animation unique (qui ne s'exÃ©cute qu'une seule fois
         comme les explosions), auquel cas, OneTimeAnimation vaudra 1. */
         if(entity->frameNumber > getMonsterFrameMax(entity->name, entity->borned)) entity->frameNumber = 0;
     }
-    /* Sinon, on décrémente notre timer */
+    /* Sinon, on dÃ©crÃ©mente notre timer */
     else entity->frameTimer--;
 
     int srcX, srcY;
 
     monsterBlitt(entity->name, entity->state, entity->frameNumber, &entity->w, &entity->h, &srcX, &srcY, entity->borned);
-    /* Ensuite, on peut passer la main à notre fonction */
+    /* Ensuite, on peut passer la main Ã  notre fonction */
 
-    /* Rectangle de destination à dessiner */
+    /* Rectangle de destination Ã  dessiner */
     SDL_Rect dest;
 
-    /* On soustrait des coordonnées de notre monstre, ceux du début de la map,
+    /* On soustrait des coordonnÃ©es de notre monstre, ceux du dÃ©but de la map,
     pour qu'il colle au scrolling : */
     dest.x = entity->x - getStartX();
     dest.y = entity->y - getStartY();
@@ -243,9 +243,9 @@ void drawMonster(GameObject *entity)
     /* Rectangle source */
     SDL_Rect src;
 
-    /* Pour connaître le X de la bonne frame à dessiner,
-    il suffit de multiplier la largeur du sprite par le numéro de la frame
-    à afficher -> 0 = 0; 1 = 40; 2 = 80... */
+    /* Pour connaÃ®tre le X de la bonne frame Ã  dessiner,
+    il suffit de multiplier la largeur du sprite par le numÃ©ro de la frame
+    Ã  afficher -> 0 = 0; 1 = 40; 2 = 80... */
     src.x = srcX;
     src.y = srcY;
     src.w = entity->w;
@@ -253,7 +253,7 @@ void drawMonster(GameObject *entity)
 
 
     /* Gestion du flip (retournement de l'image selon que le monstre
-    regarde à droite ou à gauche */
+    regarde Ã  droite ou Ã  gauche */
     if(entity->direction == LEFT || (entity->saveDirection == LEFT && entity->direction == IDLE))
         SDL_RenderCopyEx(getRenderer(), monsterSprite, &src, &dest, 0, 0, SDL_FLIP_HORIZONTAL);
     else SDL_RenderCopyEx(getRenderer(), monsterSprite, &src, &dest, 0, 0, SDL_FLIP_NONE);

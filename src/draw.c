@@ -7,7 +7,7 @@ SDL_Texture *tilesetHUD, *HUD_etoiles;
 
 void drawGame(void)
 {
-    /* Affiche le background aux coordonnées (0,0) */
+    /* Affiche le background aux coordonnÃ©es (0,0) */
     drawImage(getBackground(), 0, 0);
 
     /* Affiche la map de tiles : layer 2 (couche du fond) */
@@ -30,10 +30,10 @@ void drawGame(void)
     /* On affiche le HUD par-dessus tout le reste */
     drawHUD();
 
-    /* Affiche l'écran */
+    /* Affiche l'Ã©cran */
     SDL_RenderPresent(getRenderer());
 
-    /* Délai pour laisser respirer le processeur */
+    /* DÃ©lai pour laisser respirer le processeur */
     SDL_Delay(1);
 
 }
@@ -51,11 +51,11 @@ SDL_Texture *loadImage(char *name)
         /* Conversion de l'image en texture */
         texture = SDL_CreateTextureFromSurface(getRenderer(), loadedImage);
 
-        /* On se débarrasse du pointeur vers une surface */
+        /* On se dÃ©barrasse du pointeur vers une surface */
         SDL_FreeSurface(loadedImage);
         loadedImage = NULL;
     }
-    else printf("L'image n'a pas pu être chargée! SDL_Error : %s\n", SDL_GetError());
+    else printf("L'image n'a pas pu Ãªtre chargÃ©e! SDL_Error : %s\n", SDL_GetError());
 
     return texture;
 
@@ -67,11 +67,11 @@ void drawImage(SDL_Texture *image, int x, int y)
 {
     SDL_Rect dest;
 
-    /* Règle le rectangle à dessiner selon la taille de l'image source */
+    /* RÃ¨gle le rectangle Ã  dessiner selon la taille de l'image source */
     dest.x = x;
     dest.y = y;
 
-    /* Dessine l'image entière sur l'écran aux coordonnées x et y */
+    /* Dessine l'image entiÃ¨re sur l'Ã©cran aux coordonnÃ©es x et y */
     SDL_QueryTexture(image, NULL, NULL, &dest.w, &dest.h);
     SDL_RenderCopy(getRenderer(), image, NULL, &dest);
 
@@ -95,7 +95,7 @@ void delay(unsigned int frameLimit)
 
 void drawTile(SDL_Texture *image, int destx, int desty, int srcx, int srcy)
 {
-    /* Rectangle de destination à dessiner */
+    /* Rectangle de destination Ã  dessiner */
     SDL_Rect dest;
 
     dest.x = destx;
@@ -111,7 +111,7 @@ void drawTile(SDL_Texture *image, int destx, int desty, int srcx, int srcy)
     src.w = TILE_SIZE;
     src.h = TILE_SIZE;
 
-    /* Dessine la tile choisie sur l'écran aux coordonnées x et y */
+    /* Dessine la tile choisie sur l'Ã©cran aux coordonnÃ©es x et y */
     SDL_RenderCopy(getRenderer(), image, &src, &dest);
 
 }
@@ -139,7 +139,7 @@ void cleanHUD(void)
 
 void drawHUD(void)
 {
-    /* On crée une variable qui contiendra notre texte (moins de 200 caractères) */
+    /* On crÃ©e une variable qui contiendra notre texte (moins de 200 caractÃ¨res) */
 
     drawLifePlayer();
     drawCoinPlayer();
@@ -149,11 +149,11 @@ void drawHUD(void)
 
 
 
-    /* Puis on utilise notre fonction créée précédemment pour écrire en noir (0, 0, 0, 255)
+    /* Puis on utilise notre fonction crÃ©Ã©e prÃ©cÃ©demment pour Ã©crire en noir (0, 0, 0, 255)
     et en blanc (255, 255, 255, 255) afin de surligner le texte et le rendre plus visible */
 
 
-    /* Affiche le nombre d'étoiles en haut à gauche
+    /* Affiche le nombre d'Ã©toiles en haut Ã  gauche
     drawImage(HUD_etoiles, 60, 60);
 
     sprintf(text, "%d", getNombreDetoiles());
@@ -166,7 +166,7 @@ void drawHUD(void)
 
 void drawLifePlayer(void)
 {
-    /* Affiche le nombre de coeurs, on crée une boucle pour afficher de 1 à 3 cœurs selon la vie, avec un décalage de 32 px */
+    /* Affiche le nombre de coeurs, on crÃ©e une boucle pour afficher de 1 Ã  3 cÂœurs selon la vie, avec un dÃ©calage de 32 px */
     int xsource = 0;
     int ysource = 0;
     int ydest = 20;
@@ -175,7 +175,7 @@ void drawLifePlayer(void)
     float ratio = (float)getLife() / ratioMax * 100; //Permet de trouver la taille en pixel d'un PV
     float coeff = 2; //Coefficient multiplicateur permettant d'ajuster la taille de l'image
 
-    /* Permet d'éviter que la vie soit trop grande par rapport à la barre */
+    /* Permet d'Ã©viter que la vie soit trop grande par rapport Ã  la barre */
     if(ratio > 58) ratio = 58;
 
     /* Dessine la barre */
@@ -213,7 +213,7 @@ void drawCoinPlayer(void)
 {
     char text[200];
 
-    /* Affiche le nombre de vies en bas à droite - Adaptation à la fenêtre auto */
+    /* Affiche le nombre de vies en bas Ã  droite - Adaptation Ã  la fenÃªtre auto */
     drawTileHUD(tilesetHUD, SCREEN_WIDTH - 115, SCREEN_HEIGHT - 55, 64, 0, 10, 10, 2, 2);
 
     /* Pour afficher le nombre de vies, on formate notre string pour qu'il la valeur de la variable */
@@ -235,7 +235,7 @@ void drawCoinPlayer(void)
 
 void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, int w, int h, float coeffW, float coeffH)
 {
-    /* Rectangle de destination à dessiner */
+    /* Rectangle de destination Ã  dessiner */
     SDL_Rect dest;
 
     dest.x = destx;
@@ -251,7 +251,7 @@ void drawTileHUD(SDL_Texture *image, int destx, int desty, int srcx, int srcy, i
     src.w = w;
     src.h = h;
 
-    /* Dessine la tile choisie sur l'écran aux coordonnées x et y */
+    /* Dessine la tile choisie sur l'Ã©cran aux coordonnÃ©es x et y */
     SDL_RenderCopy(getRenderer(), image, &src, &dest);
 
 }

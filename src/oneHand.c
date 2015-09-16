@@ -3,7 +3,7 @@
 GameObject oneHand;
 
 
-/* Fonction dessinant l'épée pour le moment */
+/* Fonction dessinant l'Ã©pÃ©e pour le moment */
 void drawOnehand(void)
 {
     GameObject *entity = getPlayer();
@@ -12,7 +12,7 @@ void drawOnehand(void)
 
     getOneHandDest(&x, &y);
 
-    /* Différentes valeurs en fonction de la direction, pour que les collisions soient plus précises */
+    /* DiffÃ©rentes valeurs en fonction de la direction, pour que les collisions soient plus prÃ©cises */
     oneHand.w = getPlayerDirection() == RIGHT || getPlayerDirection() == LEFT ? SWORD_WIDTH_HORIZONTAL :
                 getPlayerDirection() == DOWN ? SWORD_WIDTH_DOWN :
                 getPlayerDirection() == UP ? SWORD_WIDTH_UP :
@@ -53,7 +53,7 @@ void drawOnehand(void)
 
 
 
-/* Série de fonctions renvoyant le x et le y en fonction de la frame */
+/* SÃ©rie de fonctions renvoyant le x et le y en fonction de la frame */
 void getOneHandDest(int *x, int *y)
 {
     if(getPlayerDirection() == RIGHT)
@@ -130,7 +130,7 @@ int oneHandHurt(int mX, int mY, int mW, int mH)
 
     getOneHandDest(&x, &y);
 
-    /* Coordonnées de l'arme en fonction de la position du joueur */
+    /* CoordonnÃ©es de l'arme en fonction de la position du joueur */
     x = x + getPlayerx();
     y = y + getPlayery();
 

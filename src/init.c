@@ -14,11 +14,11 @@ SDL_Renderer *getRenderer(void)
 
 void init(char *title)
 {
-    /* On crée la fenêtre, représentée par le pointeur jeu.window en utilisant la largeur et la
-    hauteur définies dans les defines (defs.h).
-    Nouveautés SDL2 : on peut centrer la fenêtre avec SDL_WINDOWPOS_CENTERED, et choisir la taille
-    de la fenêtre, pour que la carte graphique l'agrandisse automatiquement. Notez aussi qu'on peut
-    maintenant créer plusieurs fenêtres. */
+    /* On crÃ©e la fenÃªtre, reprÃ©sentÃ©e par le pointeur jeu.window en utilisant la largeur et la
+    hauteur dÃ©finies dans les defines (defs.h).
+    NouveautÃ©s SDL2 : on peut centrer la fenÃªtre avec SDL_WINDOWPOS_CENTERED, et choisir la taille
+    de la fenÃªtre, pour que la carte graphique l'agrandisse automatiquement. Notez aussi qu'on peut
+    maintenant crÃ©er plusieurs fenÃªtres. */
 
     screen = SDL_CreateWindow(title,
                               SDL_WINDOWPOS_CENTERED,
@@ -26,13 +26,13 @@ void init(char *title)
                               SCREEN_WIDTH, SCREEN_HEIGHT,
                               SDL_WINDOW_SHOWN);
 
-    /* On crée un renderer pour la SDL et on active la synchro verticale : VSYNC */
+    /* On crÃ©e un renderer pour la SDL et on active la synchro verticale : VSYNC */
     renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
 
     /* Si on n'y arrive pas, on quitte en enregistrant l'erreur dans stdout.txt */
     if(screen == NULL || renderer == NULL)
     {
-        printf("Impossible d'initialiser le mode écran à %d x %d: %s\n", SCREEN_WIDTH,
+        printf("Impossible d'initialiser le mode Ã©cran Ã  %d x %d: %s\n", SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_GetError());
         exit(EXIT_FAILURE);
     }
@@ -42,25 +42,25 @@ void init(char *title)
 
     if(!(IMG_Init(imgFlags) & imgFlags))
     {
-        printf("SDL_image n'a pu être initialisée! SDL_image Error: %s\n", IMG_GetError());
+        printf("SDL_image n'a pu Ãªtre initialisÃ©e! SDL_image Error: %s\n", IMG_GetError());
         exit(EXIT_FAILURE);
     }
 
     /* On cache le curseur de la souris */
     SDL_ShowCursor(SDL_DISABLE);
 
-    /* On initialise SDL_ttf 2 qui gérera l'écriture de texte */
+    /* On initialise SDL_ttf 2 qui gÃ©rera l'Ã©criture de texte */
     if(TTF_Init() < 0)
     {
-        printf("Impossible d'initialisée SDL TTF: %s\n", TTF_GetError());
+        printf("Impossible d'initialisÃ©e SDL TTF: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
     /* Chargement de la police */
     loadFont("ressources/font/GenBasB.ttf", 16);
 
-    /* On initialise SDL_Mixer 2, qui gérera la musique et les effets sonores */
-    int flags = MIX_INIT_MP3;
+    /* On initialise SDL_Mixer 2, qui gÃ©rera la musique et les effets sonores */
+    int flags = MIX_INIT_FLAG;
     int initted = Mix_Init(flags);
 
     if((initted & flags) != flags)
@@ -76,10 +76,10 @@ void init(char *title)
         exit(EXIT_FAILURE);
     }
 
-    /* Définit le nombre de pistes audio (channels) à mixer */
+    /* DÃ©finit le nombre de pistes audio (channels) Ã  mixer */
     Mix_AllocateChannels(32);
 
-    /* Initialise le sous-système de la SDL gérant les joysticks */
+    /* Initialise le sous-systÃ¨me de la SDL gÃ©rant les joysticks */
     SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 
     /* On cherche si il y a des joysticks */
@@ -94,29 +94,29 @@ void cleanup()
     /* Nettoie les sprites de la map */
     cleanMaps();
 
-    /* Libère le sprite du héros */
+    /* LibÃ¨re le sprite du hÃ©ros */
     cleanPlayer();
 
-    /* Libère le sprite des monstres */
+    /* LibÃ¨re le sprite des monstres */
     cleanMonsters();
 
-    /* Libère le HUD */
+    /* LibÃ¨re le HUD */
     cleanHUD();
 
     /* Ferme la prise en charge du joystick */
     closeJoystick();
 
-    /* On libère la musique */
+    /* On libÃ¨re la musique */
     cleanUpMusic();
 
-    /* On libère les sons */
+    /* On libÃ¨re les sons */
     freeSound();
 
-    /* On quitte SDL_Mixer 2 et on décharge la mémoire */
+    /* On quitte SDL_Mixer 2 et on dÃ©charge la mÃ©moire */
     Mix_CloseAudio();
     Mix_Quit();
 
-    /* On fait le ménage et on remet les pointeurs à NULL */
+    /* On fait le mÃ©nage et on remet les pointeurs Ã  NULL */
     SDL_DestroyRenderer(renderer);
     renderer = NULL;
 
@@ -135,13 +135,13 @@ void cleanup()
 
 void loadGame(void)
 {
-    /* On charge les données pour la map */
+    /* On charge les donnÃ©es pour la map */
     initMaps();
 
     /* On charge la feuille de sprites du monstre */
     initMonsterSprites();
 
-    /* On charge le spritesheet de notre héros */
+    /* On charge le spritesheet de notre hÃ©ros */
     initPlayerSprites();
 
     /* On commence au premier niveau */
@@ -156,7 +156,7 @@ void loadGame(void)
     initHUD();
 
     /* on charge la musique */
-    loadSong("ressources/music/tavern.mp3");
+    loadSong(TAVERNE_SONG);
 
     /* On charge les sounds Fx */
     loadSound();

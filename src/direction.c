@@ -1,13 +1,13 @@
 #include "prototypes.h"
 
-/* Direction aléatoire du monstre */
+/* Direction alÃ©atoire du monstre */
 int randomDirection(GameObject *entity)
 {
-    float lowerBound = 1; /* Le résultat doit être entre 1 et 4 inclut */
+    float lowerBound = 1; /* Le rÃ©sultat doit Ãªtre entre 1 et 4 inclut */
     float upperBound = 4;
 
-    /*Le monstre alterne entre un déplacement aléatoire de 100 ms et
-    un moment d'inactivité de 50 ms */
+    /*Le monstre alterne entre un dÃ©placement alÃ©atoire de 100 ms et
+    un moment d'inactivitÃ© de 50 ms */
 
     if(entity->borned)
     {
@@ -48,7 +48,7 @@ int randomDirection(GameObject *entity)
 /* Les quatre fonctions de direction du joueur */
 void playerDirLeft(Input *input, GameObject *entity)
 {
-    /* Le héros ne bouge pas si on appuie sur gauche et droite en même temps */
+    /* Le hÃ©ros ne bouge pas si on appuie sur gauche et droite en mÃªme temps */
     if(input->left && !input->right && (input->input1 == INPUT_LEFT || input->input1 == NONE))
     {
         input->input1 = INPUT_LEFT;
@@ -56,13 +56,13 @@ void playerDirLeft(Input *input, GameObject *entity)
         entity->dirX -= PLAYER_SPEED;
         entity->frameMax = 9;
 
-        /* Et on indique qu'il va à gauche */
+        /* Et on indique qu'il va Ã  gauche */
         entity->direction = LEFT;
 
-        /* Si ce n'était pas son état auparavant */
+        /* Si ce n'Ã©tait pas son Ã©tat auparavant */
         if(entity->state != WALK_HORIZONTAL)
         {
-            /* On enregistre l'anim' de la marche et on l'initialise à 0 */
+            /* On enregistre l'anim' de la marche et on l'initialise Ã  0 */
             entity->state = WALK_HORIZONTAL;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
@@ -92,17 +92,17 @@ void playerDirRight(Input *input, GameObject *entity)
     {
         input->input1 = INPUT_RIGHT;
 
-        /* On augmente les coordonnées en x du joueur */
+        /* On augmente les coordonnÃ©es en x du joueur */
         entity->dirX += PLAYER_SPEED;
         entity->frameMax = 9;
 
-        /* Et on indique qu'il va à droite */
+        /* Et on indique qu'il va Ã  droite */
         entity->direction = RIGHT;
 
-        /* Si ce n'était pas son état auparavant */
+        /* Si ce n'Ã©tait pas son Ã©tat auparavant */
         if(entity->state != WALK_HORIZONTAL)
         {
-            /* On enregistre l'anim' de la marche et on l'initialise à 0 */
+            /* On enregistre l'anim' de la marche et on l'initialise Ã  0 */
             entity->state = WALK_HORIZONTAL;
             entity->frameNumber = 0;
             entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
@@ -206,14 +206,14 @@ void playerDir(Input *input, GameObject *entity)
 
 void playerIdleHorizontale(GameObject *entity)
 {
-    /* On teste si le joueur n'était pas déjà inactif, pour ne pas recharger l'animation
-    à chaque tour de boucle */
+    /* On teste si le joueur n'Ã©tait pas dÃ©jÃ  inactif, pour ne pas recharger l'animation
+    Ã  chaque tour de boucle */
     if(entity->state == WALK_HORIZONTAL)
     {
         entity->dirX = 0;
         entity->dirY = 0;
 
-        /* On enregistre l'anim' de l'inactivité et on l'initialise à 0 */
+        /* On enregistre l'anim' de l'inactivitÃ© et on l'initialise Ã  0 */
         entity->state = IDLE_HORIZONTAL;
         entity->frameNumber = 0;
         entity->frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;

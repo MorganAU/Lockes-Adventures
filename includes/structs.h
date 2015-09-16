@@ -3,9 +3,9 @@
 
 #include "defs.h"
 
-/* Structures qui seront utilisées pour gérer le jeu */
+/* Structures qui seront utilisÃ©es pour gÃ©rer le jeu */
 
-/* Structure pour gérer l'input */
+/* Structure pour gÃ©rer l'input */
 typedef struct Input
 {
     int left, right, up, down, useItem, attack, enter, erase, pause;
@@ -16,61 +16,61 @@ typedef struct Input
 
 
 
-/* Structure pour gérer la map */
+/* Structure pour gÃ©rer la map */
 typedef struct Map
 {
     SDL_Texture *background;
     SDL_Texture *tileSet, *tileSetB;
 
-    /* Numéro du tileset à utiliser */
+    /* NumÃ©ro du tileset Ã  utiliser */
     int tilesetDisplay;
 
-    /* Coordonnées de départ du héros, lorsqu'il commence le niveau */
+    /* CoordonnÃ©es de dÃ©part du hÃ©ros, lorsqu'il commence le niveau */
     int beginx, beginy;
 
-    /* Coordonnées de début, lorsqu'on doit dessiner la map */
+    /* CoordonnÃ©es de dÃ©but, lorsqu'on doit dessiner la map */
     int startX, startY;
 
-    /* Coordonnées max de fin de la map */
+    /* CoordonnÃ©es max de fin de la map */
     int maxX, maxY;
 
-    /* Tableau à double dimension représentant la map de tiles */
+    /* Tableau Ã  double dimension reprÃ©sentant la map de tiles */
     int tile[MAX_MAP_Y][MAX_MAP_X];
 
-    /* Deuxième couche de tiles */
+    /* DeuxiÃ¨me couche de tiles */
     int tile2[MAX_MAP_Y][MAX_MAP_X];
 
-    /* Troisième couche de tiles */
+    /* TroisiÃ¨me couche de tiles */
     int tile3[MAX_MAP_Y][MAX_MAP_X];
 
-    /* Timer et numéro du tileset à afficher pour animer la map */
+    /* Timer et numÃ©ro du tileset Ã  afficher pour animer la map */
     int mapTimer, tileSetNumber;
 
 } Map;
 
 
 
-/* Structure pour gérer nos sprites */
+/* Structure pour gÃ©rer nos sprites */
 typedef struct GameObject
 {
-    /* Points de vie/santé + chrono d'invincibilité */
+    /* Points de vie/santÃ© + chrono d'invincibilitÃ© */
     int life, lifeMax, invincibleTimer;
 
     int name, borned, blocked;
 
-    /* Coordonnées du sprite */
+    /* CoordonnÃ©es du sprite */
     int x, y;
 
     /* Largeur, hauteur du sprite */
     int h, w;
 
-    /* Largeur, hauteur du sprite quand le héros attaque */
+    /* Largeur, hauteur du sprite quand le hÃ©ros attaque */
     int wAttack, hAttack;
 
-    /* Checkpoint pour le héros (actif ou non) */
+    /* Checkpoint pour le hÃ©ros (actif ou non) */
     int checkpointWorking;
 
-    /* Coordonnées de respawn */
+    /* CoordonnÃ©es de respawn */
     int respawnX, respawnY;
 
     /* Attaque */
@@ -79,11 +79,11 @@ typedef struct GameObject
 
 
     /* Variables utiles pour l'animation :
-        Numéro de la frame en cours + timer */
+        NumÃ©ro de la frame en cours + timer */
         int frameNumber, frameTimer, frameMax;
 
-        /* Nombre max de frames, état du sprite et direction
-        dans laquelle il se déplace */
+        /* Nombre max de frames, Ã©tat du sprite et direction
+        dans laquelle il se dÃ©place */
         int state, direction;
         float randomDir;
         int saveState, saveDirection;
@@ -96,11 +96,11 @@ typedef struct GameObject
         int timerTouch;
         int timerRandDir;
 
-        /* Vecteurs de déplacement temporaires avant détection
+        /* Vecteurs de dÃ©placement temporaires avant dÃ©tection
         des collisions avec la map */
         float dirX, dirY;
 
-        /* Sauvegarde des coordonnées de départ */
+        /* Sauvegarde des coordonnÃ©es de dÃ©part */
         int saveX, saveY;
 
 } GameObject;

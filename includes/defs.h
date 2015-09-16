@@ -8,12 +8,12 @@
 #include <SDL2/SDL.h>
 #include <time.h>
 
-/* On inclut les libs supplémentaires */
+/* On inclut les libs supplÃ©mentaires */
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-/* Taille de la fenêtre */
+/* Taille de la fenÃªtre */
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 480
 
@@ -29,11 +29,11 @@
 #define TIME_BETWEEN_2_FRAMES_PLAYER 4
 #define TIME_BETWEEN_2_FRAMES_PLAYER_ATTACK 3
 
-/* Taille du sprite de notre héros */
+/* Taille du sprite de notre hÃ©ros */
 #define PLAYER_WIDTH 30
 #define PLAYER_HEIGHT 46
 
-/* Taille du sprite de l'épée */
+/* Taille du sprite de l'Ã©pÃ©e */
 #define SWORD_WIDTH_HORIZONTAL 17
 #define SWORD_HEIGHT_HORIZONTAL 19
 
@@ -43,11 +43,11 @@
 #define SWORD_WIDTH_UP 9
 #define SWORD_HEIGHT_UP 10
 
-/* Vitesse de déplacement en pixel du sprite */
+/* Vitesse de dÃ©placement en pixel du sprite */
 #define PLAYER_SPEED 3
 #define PLAYER_HURT 2
 
-/* Valeurs attribuées aux états/directions */
+/* Valeurs attribuÃ©es aux Ã©tats/directions */
 #define IDLE_HORIZONTAL 0
 #define WALK_HORIZONTAL 1
 #define IDLE_UP 2
@@ -71,13 +71,13 @@
 
 
 
-/* Constantes pour les limites de la caméra avant scrolling */
+/* Constantes pour les limites de la camÃ©ra avant scrolling */
 #define LIMITE_X 400
 #define LIMITE_Y 220
 #define LIMITE_W 100
 #define LIMITE_H 80
 
-/* Constante définissant le seuil entre les tiles traversables
+/* Constante dÃ©finissant le seuil entre les tiles traversables
 (blank) et les tiles solides */
 #define BLANK_TILE 7
 
@@ -96,7 +96,7 @@
 #define INPUT_DOWN 4
 #define NONE 0
 
-/* Dead zone de la manette pour éviter les mouvements involontaires */
+/* Dead zone de la manette pour Ã©viter les mouvements involontaires */
 #define DEAD_ZONE 8000
 
 /* Mapping de la manette */
@@ -110,7 +110,7 @@
 #define START_BUTTON 10
 #define QUIT_BUTTON 9
 
-/* Nombre max de monstres à l'écran */
+/* Nombre max de monstres Ã  l'Ã©cran */
 #define MONSTERS_MAX 50
 
 /* Dimensions du monstre */

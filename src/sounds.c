@@ -11,7 +11,7 @@ Mix_Music *musique;
 
 void loadSong(char filename[200])
 {
-    /* On libère la chanson précédente s'il y en a une */
+    /* On libÃ¨re la chanson prÃ©cÃ©dente s'il y en a une */
     if(musique != NULL)
     {
         Mix_HaltMusic();
@@ -23,11 +23,11 @@ void loadSong(char filename[200])
 
     if(musique == NULL)
     {
-        fprintf(stderr, "Can't read music \n");
+        printf("Mix_LoadMUS: %s\n", Mix_GetError());
         exit(EXIT_FAILURE);
     }
 
-    /* On active la répétition de la musique à l'infini */
+    /* On active la rÃ©pÃ©tition de la musique Ã  l'infini */
     if(Mix_PlayMusic(musique, -1) == -1)
     {
         printf("Mix_PlayMusic: %s\n", Mix_GetError());
@@ -39,7 +39,7 @@ void loadSong(char filename[200])
 
 void cleanUpMusic(void)
 {
-    /* On libère la musique */
+    /* On libÃ¨re la musique */
     if(musique != NULL) Mix_FreeMusic(musique);
 
 }

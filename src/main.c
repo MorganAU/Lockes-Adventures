@@ -1,6 +1,6 @@
 #include "prototypes.h"
 
-/* Déclaration des variables/structures utilisées par le jeu */
+/* DÃ©claration des variables/structures utilisÃ©es par le jeu */
 Input input;
 
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     /* On initialise le joueur */
     initializePlayer(1);
 
-    /* Appelle la fonction cleanup à la fin du programme */
+    /* Appelle la fonction cleanup Ã  la fin du programme */
     atexit(cleanup);
 
     /* Boucle infinie, principale, du jeu */
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
         /* Gestion des inputs clavier */
         gestionInputs(&input);
 
-        /* on met à jour le jeu, en commençant par le joueur */
+        /* on met Ã  jour le jeu, en commenÃ§ant par le joueur */
         updatePlayer(&input);
 
         /* Puis les monstres */
