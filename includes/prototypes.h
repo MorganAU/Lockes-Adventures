@@ -4,7 +4,16 @@
 #include "structs.h"
 
 
-/***** Catalogue des prototypes des fonctions utilisées *****/
+#ifdef _WIN32
+#define MIX_INIT_FLAG MIX_INIT_MP3
+#define TAVERNE_SONG ressources/music/tavern.mp3
+#endif
+#ifdef linux
+#define MIX_INIT_FLAG MIX_INIT_OGG
+#define TAVERNE_SONG "ressources/music/tavern.ogg"
+#endif
+
+/***** Catalogue des prototypes des fonctions utilisÃ©es *****/
 
 
 

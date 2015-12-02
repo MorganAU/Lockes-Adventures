@@ -1,13 +1,13 @@
 #include "prototypes.h"
 
 
-/* Déclaration de notre police de caractères */
+/* DÃ©claration de notre police de caractÃ¨res */
 TTF_Font *font;
 
 
 void loadFont(char *name, int size)
 {
-    /* On utilise SDL_TTF pour charger la police à la taille spécifiée par size */
+    /* On utilise SDL_TTF pour charger la police Ã  la taille spÃ©cifiÃ©e par size */
     font = TTF_OpenFont(name, size);
 
     if(font == NULL)
@@ -32,7 +32,7 @@ void closeFont(void)
 void drawString(char *text, int x, int y, int r, int g, int b, int a)
 {
     SDL_Rect dest, destOption;
-    SDL_Surface *surface, *surfaceOption; /* Pour écrire le texte */
+    SDL_Surface *surface, *surfaceOption; /* Pour Ã©crire le texte */
     SDL_Texture *texture, *textureOption; /* Pour convertir la surface en texture */
     SDL_Color foregroundColor, foregroundColorOption;
 
@@ -45,7 +45,7 @@ void drawString(char *text, int x, int y, int r, int g, int b, int a)
 
     foregroundColorOption.r = foregroundColorOption.g = foregroundColorOption.b = foregroundColorOption.a = 255;
 
-    /* On utilise SDL_TTF pour générer une SDL_Surface à partir d'une chaîne de caractères (string) */
+    /* On utilise SDL_TTF pour gÃ©nÃ©rer une SDL_Surface Ã  partir d'une chaÃ®ne de caractÃ¨res (string) */
     surface = TTF_RenderUTF8_Blended(font, text, foregroundColor);
     surfaceOption = TTF_RenderUTF8_Blended(font, text, foregroundColorOption);
 
@@ -56,13 +56,13 @@ void drawString(char *text, int x, int y, int r, int g, int b, int a)
         texture = SDL_CreateTextureFromSurface(getRenderer(), surface);
         textureOption = SDL_CreateTextureFromSurface(getRenderer(), surfaceOption);
 
-        /* On se débarrasse du pointeur vers une surface et on libère la SDL_Surface temporaire */
+        /* On se dÃ©barrasse du pointeur vers une surface et on libÃ¨re la SDL_Surface temporaire */
         SDL_FreeSurface(surface);
         surface = NULL;
         SDL_FreeSurface(surfaceOption);
         surfaceOption = NULL;
 
-        /* On dessine cette texture à l'écran */
+        /* On dessine cette texture Ã  l'Ã©cran */
         dest.x = x;
         dest.y = y;
 
@@ -81,7 +81,7 @@ void drawString(char *text, int x, int y, int r, int g, int b, int a)
     }
     else
     {
-        printf("La chaîne n'a pas pu être écrite %s: %s\n", text, TTF_GetError());
+        printf("La chaÃ®ne n'a pas pu Ãªtre Ã©crite %s: %s\n", text, TTF_GetError());
         exit(EXIT_FAILURE);
     }
 

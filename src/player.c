@@ -6,7 +6,7 @@ GameObject player;
 SDL_Texture *playerSpriteSheet;
 
 
-/* Renvoie le GameObject player (héros) */
+/* Renvoie le GameObject player (hÃ©ros) */
 GameObject *getPlayer(void)
 {
     return &player;
@@ -31,7 +31,7 @@ SDL_Texture *getSprite(void)
 
 
 
-/* Renvoie les coordonnées x du héros */
+/* Renvoie les coordonnÃ©es x du hÃ©ros */
 int getPlayerx(void)
 {
     return player.x;
@@ -40,7 +40,7 @@ int getPlayerx(void)
 
 
 
-/* Renvoie les coordonnées y du héros */
+/* Renvoie les coordonnÃ©es y du hÃ©ros */
 int getPlayery(void)
 {
     return player.y;
@@ -81,7 +81,7 @@ void setPlayerDirY(float valeur)
 
 
 
-/* Renvoie le numéro du niveau en cours */
+/* Renvoie le numÃ©ro du niveau en cours */
 int getLevel(void)
 {
     return level;
@@ -139,7 +139,7 @@ void setStarNumber(int valeur)
 
 
 
-/* Charge le spritesheet de notre héros au début du jeu */
+/* Charge le spritesheet de notre hÃ©ros au dÃ©but du jeu */
 void initPlayerSprites(void)
 {
     playerSpriteSheet = loadImage("ressources/graphics/sprite_hero2.png");
@@ -148,7 +148,7 @@ void initPlayerSprites(void)
 
 
 
-/* Libère le sprite du héros à la fin du jeu */
+/* LibÃ¨re le sprite du hÃ©ros Ã  la fin du jeu */
 void cleanPlayer(void)
 {
     if(playerSpriteSheet != NULL)
@@ -179,7 +179,7 @@ int getLifeMax(void)
 
 void killPlayer(void)
 {
-    /* On met le timer à 1 pour tuer le joueur instantanément */
+    /* On met le timer Ã  1 pour tuer le joueur instantanÃ©ment */
     player.timerMort = 1;
     player.dirX = 0;
     player.dirY = 0;
@@ -193,7 +193,7 @@ void killPlayer(void)
 
 void playerHurts(GameObject entity)
 {
-    /* Si le timer d'invincibilité est à 0, on perd un coeur */
+    /* Si le timer d'invincibilitÃ© est Ã  0, on perd un coeur */
     if(player.invincibleTimer == 0 && !player.touch)
     {
         player.life--;
@@ -216,23 +216,23 @@ int getHurts(void)
 
 
 
-/* Initialise le héros */
+/* Initialise le hÃ©ros */
 void initializePlayer(int newLevel)
 {
-    /* PV à 3 */
+    /* PV Ã  3 */
 
     player.lifeMax = 9875;
     player.life = 9875;
 
-    /* Timer d'invincibilité */
+    /* Timer d'invincibilitÃ© */
     player.invincibleTimer = 0;
     player.timerTouch = 20;
 
-    /* Indique l'état et la direction de notre héros */
+    /* Indique l'Ã©tat et la direction de notre hÃ©ros */
     player.direction = DOWN;
     player.state = IDLE_DOWN;
 
-    /* Indique le numéro de la frame où commencer */
+    /* Indique le numÃ©ro de la frame oÃ¹ commencer */
     player.frameNumber = 0;
 
     /* ... la valeur de son chrono au timer */
@@ -244,22 +244,22 @@ void initializePlayer(int newLevel)
     player.x = getBeginX();
     player.y = getBeginY();
 
-    /* On réinitialise les coordonnées de la caméra si on change de niveau */
+    /* On rÃ©initialise les coordonnÃ©es de la camÃ©ra si on change de niveau */
     if(newLevel)
     {
         setStartX(getBeginX());
         setStartY(getBeginY());
     }
 
-    /* Hauteur et largeur de notre héros */
+    /* Hauteur et largeur de notre hÃ©ros */
     player.w = PLAYER_WIDTH;
     player.h = PLAYER_HEIGHT;
 
-    /* Variables nécessaires au fonctionnement de la gestion des collisions */
+    /* Variables nÃ©cessaires au fonctionnement de la gestion des collisions */
     player.timerMort = 0;
 
-    /* Réinitialise les monstres */
-    /* Libère le sprite des monstres */
+    /* RÃ©initialise les monstres */
+    /* LibÃ¨re le sprite des monstres */
     resetMonsters();
 
 }
@@ -270,16 +270,16 @@ void drawPlayer(void)
 {
     /* Gestion du timer */
 
-    /* Si notre timer (un compte à rebours en fait) arrive à zéro */
+    /* Si notre timer (un compte Ã  rebours en fait) arrive Ã  zÃ©ro */
     if(player.state <= WALK_DOWN) walkFrameTimer();
     else attackFrameTimer();
 
-    /* Ensuite, on peut passer la main à notre fonction */
+    /* Ensuite, on peut passer la main Ã  notre fonction */
 
-    /* Rectangle de destination à dessiner */
+    /* Rectangle de destination Ã  dessiner */
     SDL_Rect dest;
 
-    /* On soustrait des coordonnées de notre héros, ceux du début de la map,
+    /* On soustrait des coordonnÃ©es de notre hÃ©ros, ceux du dÃ©but de la map,
     pour qu'il colle au scrolling : */
     dest.x = player.x - getStartX();
     dest.y = player.y - getStartY();
@@ -289,31 +289,31 @@ void drawPlayer(void)
     /* Rectangle source */
     SDL_Rect src;
 
-    /* Pour connaître le X de la bonne frame à dessiner, il suffit de multiplier
-    la largeur du sprite par le numéro de la frame à afficher -> 0 = 0; 1 = 40; 2 = 80... */
+    /* Pour connaÃ®tre le X de la bonne frame Ã  dessiner, il suffit de multiplier
+    la largeur du sprite par le numÃ©ro de la frame Ã  afficher -> 0 = 0; 1 = 40; 2 = 80... */
 
     src.x = player.frameNumber * player.w;
     src.w = player.w;
     src.h = player.h;
 
-    /* On calcule le Y de la bonne frame à dessiner, selon la valeur de l'état du héros :
+    /* On calcule le Y de la bonne frame Ã  dessiner, selon la valeur de l'Ã©tat du hÃ©ros :
     Aucun mouvement (Idle) = 0, marche (walk) = 1, etc...
     Tout cela en accord avec notre spritesheet, of course ;) */
 
     src.y = player.state * player.h;
 
-    /* Si on a été touché, et qu'on est invincible */
+    /* Si on a Ã©tÃ© touchÃ©, et qu'on est invincible */
     int q;
 
     if(player.invincibleTimer > 0) q = 2;
     else q = 1;
 
-    /* On fait clignoter le héros une frame sur deux; Pour ça, on calcule
-    si le numéro de la frame est un multiple de deux */
+    /* On fait clignoter le hÃ©ros une frame sur deux; Pour Ã§a, on calcule
+    si le numÃ©ro de la frame est un multiple de deux */
     if(player.frameNumber % q == 0)
     {
-        /* Gestion du flip (retournement de l'image selon que le sprite regarde à droite ou
-        à gauche */
+        /* Gestion du flip (retournement de l'image selon que le sprite regarde Ã  droite ou
+        Ã  gauche */
         const SDL_RendererFlip flip =
             player.direction == LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
@@ -326,18 +326,18 @@ void drawPlayer(void)
 
 void updatePlayer(Input *input)
 {
-    /* On rajoute un timer au cas où notre héros mourrait
-    Si le timer vaut 0, c'est que tout va bien, sinon, on le décrémente jusqu'à 0, et là,
-    on réinitialise.
-    C'est pour ça qu'on ne gère le joueur que si ce timer vaut 0. */
+    /* On rajoute un timer au cas oÃ¹ notre hÃ©ros mourrait
+    Si le timer vaut 0, c'est que tout va bien, sinon, on le dÃ©crÃ©mente jusqu'Ã  0, et lÃ ,
+    on rÃ©initialise.
+    C'est pour Ã§a qu'on ne gÃ¨re le joueur que si ce timer vaut 0. */
     if(player.timerMort == 0)
     {
-        if(!player.touch) // S'il n'est pas touché
+        if(!player.touch) // S'il n'est pas touchÃ©
         {
-            /* On gère le timer de l'invincibilité */
+            /* On gÃ¨re le timer de l'invincibilitÃ© */
             if(player.invincibleTimer > 0) player.invincibleTimer--;
 
-            /* On réinitialise notre vecteur de déplacement latéral (X), pour éviter que le perso
+            /* On rÃ©initialise notre vecteur de dÃ©placement latÃ©ral (X), pour Ã©viter que le perso
             ne fonce de plus en plus */
             player.dirX = player.dirY = player.isAttacking = 0;
 
@@ -345,28 +345,28 @@ void updatePlayer(Input *input)
 
             if(player.state < ATTACK_HORIZONTAL && input->puched < 3) playerDir(input, &player);
 
-            /* Si on n'appuie sur rien, on charge l'animation marquant l'inactivité (Idle), je n'ai pas regarder encore si je pouvais l'optimiser */
+            /* Si on n'appuie sur rien, on charge l'animation marquant l'inactivitÃ© (Idle), je n'ai pas regarder encore si je pouvais l'optimiser */
             playerIdle(input, &player);
 
             resetInput(input);
         }
-        /* Sinon si il est touché */
+        /* Sinon si il est touchÃ© */
         else if(player.touch)
             entityTouch();
 
-        /* On rajoute notre fonction de détection des collisions qui va mettre à
-        jour les coordonnées de notre héros. */
+        /* On rajoute notre fonction de dÃ©tection des collisions qui va mettre Ã 
+        jour les coordonnÃ©es de notre hÃ©ros. */
         mapCollision(&player);
 
-        /* On gère le scrolling */
+        /* On gÃ¨re le scrolling */
         centerScrollingOnPlayer();
     }
 
 
 
-    /*Gestion de la mort. Si timerMort est différent de 0, c'est qu'il faut réinitialiser le joueur.
-    On ignore alors ce qui précède et on joue cette boucle (un wait en fait) jusqu'à ce que
-    timerMort == 1. A ce moment-là, on le décrémente encore -> il vaut 0 et on réinitialise
+    /*Gestion de la mort. Si timerMort est diffÃ©rent de 0, c'est qu'il faut rÃ©initialiser le joueur.
+    On ignore alors ce qui prÃ©cÃ¨de et on joue cette boucle (un wait en fait) jusqu'Ã  ce que
+    timerMort == 1. A ce moment-lÃ , on le dÃ©crÃ©mente encore -> il vaut 0 et on rÃ©initialise
     le jeu avec notre bonne vieille fonction d'initialisation */
     if(player.timerMort > 0)
     {
@@ -384,18 +384,18 @@ void updatePlayer(Input *input)
 
 void centerScrollingOnPlayer(void)
 {
-    /* Nouveau scrolling à sous-boîte limite :
-    Pour éviter les effets de saccades dus à une caméra qui se centre
+    /* Nouveau scrolling Ã  sous-boÃ®te limite :
+    Pour Ã©viter les effets de saccades dus Ã  une camÃ©ra qui se centre
     automatiquement et constamment
-    sur le joueur, on crée
-    une "boîte" imaginaire autour du joueur.
-    Quand on dépasse un de ses bords (en haut, en bas, à gauche ou à
+    sur le joueur, on crÃ©e
+    une "boÃ®te" imaginaire autour du joueur.
+    Quand on dÃ©passe un de ses bords (en haut, en bas, Ã  gauche ou Ã 
     droite), on scrolle.
-    Mais là encore, au lieu de centrer sur le joueur, on déplace
-    simplement la caméra jusqu'à arriver au joueur.
+    Mais lÃ  encore, au lieu de centrer sur le joueur, on dÃ©place
+    simplement la camÃ©ra jusqu'Ã  arriver au joueur.
     On a choisi la valeur de 3 pixels pour pouvoir avoir le plaisir
     d'aller plus vite que le cameraman
-    On accélère aussi la vitesse de la caméra
+    On accÃ©lÃ¨re aussi la vitesse de la camÃ©ra
     en cas de chute rapide (pour ne pas
     perdre le joueur de vue non plus. */
 
@@ -406,47 +406,47 @@ void centerScrollingOnPlayer(void)
     int ylimmin = getStartY() + LIMITE_Y;
     int ylimmax = ylimmin + LIMITE_H;
 
-    /* Effet de retour en arrière quand on est mort :
-    Si on est très loin de la caméra, plus loin que le bord
-    de la map, on accélère le scrolling : */
+    /* Effet de retour en arriÃ¨re quand on est mort :
+    Si on est trÃ¨s loin de la camÃ©ra, plus loin que le bord
+    de la map, on accÃ©lÃ¨re le scrolling : */
     if(cxperso < getStartX()) setStartX(getStartX() - 30);
 
-    /* Si on dépasse par la gauche, on recule la caméra de 3 pixels (vous
+    /* Si on dÃ©passe par la gauche, on recule la camÃ©ra de 3 pixels (vous
     pouvez modifier cette valeur) */
     if(cxperso < xlimmin) setStartX(getStartX() - 3);
 
     /* Effet de retour en avant quand on est mort (au
-    cas où le joueur s'amuse à faire le niveau à rebours
-    après une checkpoint) :
-    Si on est très loin de la caméra, plus loin que le bord
-    de la map, on accélère le scrolling : */
+    cas oÃ¹ le joueur s'amuse Ã  faire le niveau Ã  rebours
+    aprÃ¨s une checkpoint) :
+    Si on est trÃ¨s loin de la camÃ©ra, plus loin que le bord
+    de la map, on accÃ©lÃ¨re le scrolling : */
     if(cxperso > getStartX() + SCREEN_WIDTH) setStartX(getStartX() + 30);
 
-    /* Si on dépasse par la droite, on avance la caméra de 3 pixels (vous
+    /* Si on dÃ©passe par la droite, on avance la camÃ©ra de 3 pixels (vous
     pouvez modifier cette valeur) */
     if(cxperso > xlimmax) setStartX(getStartX() + 3);
 
-    /*Si on arrive au bout de la map à gauche, on stoppe le scrolling */
+    /*Si on arrive au bout de la map Ã  gauche, on stoppe le scrolling */
     if(getStartX() < 0) setStartX(0);
 
-    /* Si on arrive au bout de la map à droite, on stoppe le scrolling à la
-    valeur Max de la map - la moitié d'un écran (pour ne pas afficher du noir). */
+    /* Si on arrive au bout de la map Ã  droite, on stoppe le scrolling Ã  la
+    valeur Max de la map - la moitiÃ© d'un Ã©cran (pour ne pas afficher du noir). */
     else if(getStartX() + SCREEN_WIDTH >= getMaxX())
         setStartX(getMaxX() - SCREEN_WIDTH);
 
-    /* Si on dépasse par le haut, on remonte la caméra de 3 pixels (vous
+    /* Si on dÃ©passe par le haut, on remonte la camÃ©ra de 3 pixels (vous
     pouvez modifier cette valeur) */
     if(cyperso < ylimmin) setStartY(getStartY() - 3);
 
-    /* Si on dépasse par le bas, on descend la caméra de 3 pixels (vous
+    /* Si on dÃ©passe par le bas, on descend la camÃ©ra de 3 pixels (vous
     pouvez modifier cette valeur) */
     if(cyperso > ylimmax) setStartY(getStartY() + 3);
 
     /*Si on arrive au bout de la map en haut, on stoppe le scrolling */
     if (getStartY() < 0) setStartY(0);
 
-    /*Si on arrive au bout de la map en bas, on stoppe le scrolling à la
-    valeur Max de la map - la moitié d'un écran (pour ne pas afficher du noir). */
+    /*Si on arrive au bout de la map en bas, on stoppe le scrolling Ã  la
+    valeur Max de la map - la moitiÃ© d'un Ã©cran (pour ne pas afficher du noir). */
     else if (getStartY() + SCREEN_HEIGHT >= getMaxY())
         setStartY(getMaxY() - SCREEN_HEIGHT);
 
@@ -458,17 +458,17 @@ void walkFrameTimer(void)
 {
     if(player.frameTimer <= 0)
     {
-        /* On le réinitialise */
+        /* On le rÃ©initialise */
         player.frameTimer = TIME_BETWEEN_2_FRAMES_PLAYER;
 
-        /*Et on incrémente notre variable qui compte les frames de 1 pour passer
-        à la suivante */
+        /*Et on incrÃ©mente notre variable qui compte les frames de 1 pour passer
+        Ã  la suivante */
         player.frameNumber++;
 
-        /* Mais si on dépasse la frame max, il faut revenir à la première : */
+        /* Mais si on dÃ©passe la frame max, il faut revenir Ã  la premiÃ¨re : */
         if(player.frameNumber >= player.frameMax) player.frameNumber = 0;
     }
-    /* Sinon, on décrémente notre timer */
+    /* Sinon, on dÃ©crÃ©mente notre timer */
     else player.frameTimer--;
 
 }

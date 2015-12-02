@@ -17,7 +17,7 @@ void attackManagement(Input *input, GameObject *entity)
         playSoundFx(ONEHANDSWORD);
     }
 
-    /* R�initialise l'attaque */
+    /* RÃ©initialise l'attaque */
     if(entity->attack && !input->attack)
         entity->attack = 0;
 
@@ -25,7 +25,7 @@ void attackManagement(Input *input, GameObject *entity)
 
 
 
-int canAttack(GameObject *entity) //V�rifie si le joueur peut attaquer
+int canAttack(GameObject *entity) //VÃ©rifie si le joueur peut attaquer
 {
     if(!entity->attack)
         return entity->canSwordAttack = 1;
